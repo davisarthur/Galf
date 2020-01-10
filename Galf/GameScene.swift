@@ -20,6 +20,7 @@ class GameScene: SKScene {
     
     override func didMove(to view: SKView) {
         
+        TerrainReader.read(code: "R12B")
         // Initialize pointer, arrow, and tile map
         self.pointer = self.childNode(withName: "//pointer") as! Pointer?
         self.arrow = self.childNode(withName: "//arrow") as! Arrow?
