@@ -40,11 +40,11 @@ extension String {
 struct TerrainBuilder {
     
     static func buildTile(tileCode: String, tileCenter: CGPoint) {
-        var tile: SKShapeNode
         let data = read(code: tileCode)
         let texture = data[0]
         let shape = data[1]
         var points: [CGPoint]
+        points = []
         
         // set shape
         if shape == "1" {
@@ -108,8 +108,30 @@ struct TerrainBuilder {
             print("Error: Invalid shape code")
         }
         
+        // create the shape
+        let ground = SKShapeNode(splinePoints: &points, count: points.count)
+        ground.lineWidth = 5
+        ground.physicsBody = SKPhysicsBody(edgeChainFrom: ground.path!)
+        ground.physicsBody?.isDynamic = false
+        
         // set ground type
         if texture == "R" {
+            ground.physicsBody?.restitution = Rough.rest
+        }
+        else if texture == "F" {
+            ground.physicsBody?.restitution = Fairway.rest
+        }
+        else if texture == "G" {
+            ground.physicsBody?.restitution = Green.rest
+        }
+        else if texture == "B" {
+            ground.physicsBody?.restitution = Bunker.rest
+        }
+        else if texture == "W" {
+            print("Water tile")
+        }
+        else {
+            print("Error: invalid ground type")
         }
     }
     

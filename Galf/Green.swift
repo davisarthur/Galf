@@ -10,19 +10,7 @@ import Foundation
 import SpriteKit
 import GameplayKit
 
-class Green: SKShapeNode {
+struct Green {
     
-    let rest = CGFloat(0.6)
-    let width = CGFloat(5.0)
-    
-    required init?(coder aDecoder: NSCoder) {
-       super.init(coder: aDecoder)
-    }
-    
-    func settings() {
-        lineWidth = width
-        physicsBody = SKPhysicsBody(edgeChainFrom: path!)
-        physicsBody?.restitution = rest
-        physicsBody?.isDynamic = false
-    }
+    static let rest = CGFloat(0.6)
 }
