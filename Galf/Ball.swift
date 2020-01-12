@@ -12,7 +12,7 @@ import GameplayKit
 
 class Ball: SKSpriteNode {
     
-    let maxPower = CGFloat(2.0)
+    let maxPower = CGFloat(3.0)
     
     required init?(coder aDecoder: NSCoder) {
        super.init(coder: aDecoder)
