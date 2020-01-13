@@ -17,7 +17,7 @@ class GameScene: SKScene {
     private var points : [CGPoint] = []
     private var pointer : Pointer!
     private var arrow : Arrow!
-    private var cam : SKCameraNode!
+    private var cam : BallCam!
     
     override func didMove(to view: SKView) {
         
@@ -27,7 +27,7 @@ class GameScene: SKScene {
         self.ball = self.childNode(withName: "//Ball") as! Ball?
         self.tileMap = self.childNode(withName: "//TileMap") as! SKTileMapNode?
         self.switchButton = self.childNode(withName: "//SwitchButton") as! SKSpriteNode?
-        self.cam = self.childNode(withName: "//ballCam") as! SKCameraNode?
+        self.cam = BallCam(boundsIn: Bounds(map: tileMap), ballIn: ball)
         
         self.camera = cam
         TerrainBuilder.createFromMap(tileMap: tileMap, scene: self)
@@ -81,6 +81,9 @@ class GameScene: SKScene {
     
     override func update(_ currentTime: TimeInterval) {
         // Called before each frame is rendered
+        
+        cam.autoMove()
+        
         if !(ball.moving()) {
             if ball.physicsBody!.isDynamic {
                 SKAction.wait(forDuration: 1.0)
