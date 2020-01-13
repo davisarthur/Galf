@@ -28,7 +28,7 @@ class BallCam : SKCameraNode {
        super.init(coder: aDecoder)
     }
     
-    func avoidBoundary() {
+    func autoMove() {
         if contains(boundaries!.left) {
             while(contains(boundaries!.left)) {
                 moveRight()
@@ -49,11 +49,9 @@ class BallCam : SKCameraNode {
                 moveUp()
             }
         }
-    }
-    
-    func autoMove() {
-        position = ball!.position
-        avoidBoundary()
+        else {
+            position = ball!.position
+        }
     }
     
     func moveLeft() {
