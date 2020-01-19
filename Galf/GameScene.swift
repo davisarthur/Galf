@@ -18,6 +18,7 @@ class GameScene: SKScene {
     private var pointer : Pointer!
     private var arrow : Arrow!
     private var cam : SKCameraNode!
+    private var pin: SKSpriteNode!
     
     override func didMove(to view: SKView) {
         
@@ -28,11 +29,12 @@ class GameScene: SKScene {
         self.tileMap = self.childNode(withName: "//TileMap") as! SKTileMapNode?
         self.switchButton = self.childNode(withName: "//SwitchButton") as! SKSpriteNode?
         self.cam = self.childNode(withName: "cam") as! SKCameraNode?
+        self.pin = self.childNode(withName: "pin") as! SKSpriteNode?
         
         self.camera = cam
         self.camera?.constraints = BallCam.genBounds(ballMap: self.tileMap, scene: self, ball: self.ball)
             
-        TerrainBuilder.createFromMap(tileMap: tileMap, scene: self)
+        TerrainBuilder.createFromMap(tileMap: tileMap, pin: pin, scene: self)
     }
     
     func touchDown(atPoint pos : CGPoint) {

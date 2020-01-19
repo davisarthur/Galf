@@ -39,9 +39,17 @@ extension String {
 // Above are necessary extensions to the String class to ease code reading
 struct TerrainBuilder {
     
-    static func createFromMap(tileMap: SKTileMapNode, scene: GameScene) {
+    static func createFromMap(tileMap: SKTileMapNode, pin: SKSpriteNode, scene: GameScene) {
+        let pinPos = CGPoint(x: pin.position.x, y: pin.position.y - 30.0)
+        let pinRow = tileMap.tileRowIndex(fromPosition: pinPos)
+        let pinCol = tileMap.tileColumnIndex(fromPosition: pinPos)
         for col in 0...tileMap.numberOfColumns - 1 {
             for ro in 0...tileMap.numberOfRows - 1 {
+                if (col == pinCol && ro == pinRow) {
+                    let newTile = createCup(center: tileMap.centerOfTile(atColumn: col, row: ro), pin: pin)
+                    scene.addChild(newTile)
+                    continue
+                }
                 let def = tileMap.tileDefinition(atColumn: col, row: ro)?.name
                 if def != nil {
                     let newTile = buildTile(tileCode: def!, tileCenter: tileMap.centerOfTile(atColumn: col, row: ro))
@@ -343,5 +351,25 @@ struct TerrainBuilder {
         output.append(left)
         output.append(right)
         return output
+    }
+    
+    static func createCup(center: CGPoint, pin: SKSpriteNode) -> SKShapeNode {
+        let left = CGPoint(x: center.x - 16.0, y: center.y)
+        let leftCup = CGPoint(x: pin.position.x - 7.0, y: center.y)
+        let leftCupBot = CGPoint(x: pin.position.x - 7.0, y: center.y - 12.0)
+        let rightCupBot = CGPoint(x: pin.position.x + 7.0, y: center.y - 12.0)
+        let rightCup = CGPoint(x: pin.position.x + 7.0, y: center.y)
+        let right = CGPoint(x: center.x + 16.0, y: center.y)
+        var points = [left, leftCup, leftCupBot, rightCupBot, rightCup, right]
+        
+        // create the shape
+        let ground = SKShapeNode(points: &points, count: points.count)
+        ground.lineWidth = 5
+        // ground.strokeColor = SKColor.clear
+        ground.physicsBody = SKPhysicsBody(edgeChainFrom: ground.path!)
+        ground.physicsBody?.isDynamic = false
+        ground.physicsBody?.restitution = Bunker.rest
+        
+        return ground
     }
 }

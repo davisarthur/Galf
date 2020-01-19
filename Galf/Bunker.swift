@@ -12,5 +12,5 @@ import GameplayKit
 
 struct Bunker {
     
-    static let rest = CGFloat(0.2)
+    static let rest = CGFloat(0.0)
 }
