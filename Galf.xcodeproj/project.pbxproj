@@ -26,7 +26,6 @@
 		6FB4BCCD23B5D88F0043D102 /* Terrain.sks in Resources */ = {isa = PBXBuildFile; fileRef = 6FB4BCCC23B5D88F0043D102 /* Terrain.sks */; };
 		6FEF6E1E23C2A89C00BF81CF /* TerrainBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FEF6E1D23C2A89C00BF81CF /* TerrainBuilder.swift */; };
 		6FFE2C5D23CC1855004387F8 /* BallCam.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FFE2C5C23CC1855004387F8 /* BallCam.swift */; };
-		6FFE2C5F23CC1D4E004387F8 /* Bounds.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FFE2C5E23CC1D4E004387F8 /* Bounds.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -63,7 +62,6 @@
 		6FB4BCCC23B5D88F0043D102 /* Terrain.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Terrain.sks; sourceTree = "<group>"; };
 		6FEF6E1D23C2A89C00BF81CF /* TerrainBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TerrainBuilder.swift; sourceTree = "<group>"; };
 		6FFE2C5C23CC1855004387F8 /* BallCam.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BallCam.swift; sourceTree = "<group>"; };
-		6FFE2C5E23CC1D4E004387F8 /* Bounds.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bounds.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -109,7 +107,6 @@
 				6F6B4E5923AAA2B000417678 /* AppDelegate.swift */,
 				6F6B4E5B23AAA2B000417678 /* GameScene.sks */,
 				6FFE2C5C23CC1855004387F8 /* BallCam.swift */,
-				6FFE2C5E23CC1D4E004387F8 /* Bounds.swift */,
 				6F6B4E5D23AAA2B000417678 /* Actions.sks */,
 				6FA1D2BA23BF0ED200D15283 /* Arrow.swift */,
 				6F6B4E5F23AAA2B000417678 /* GameScene.swift */,
@@ -243,7 +240,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				6FFE2C5D23CC1855004387F8 /* BallCam.swift in Sources */,
-				6FFE2C5F23CC1D4E004387F8 /* Bounds.swift in Sources */,
 				6F0C1A3923C19C55008C5FAB /* Ball.swift in Sources */,
 				6F0C1A3723C18FC2008C5FAB /* Pointer.swift in Sources */,
 				6FEF6E1E23C2A89C00BF81CF /* TerrainBuilder.swift in Sources */,

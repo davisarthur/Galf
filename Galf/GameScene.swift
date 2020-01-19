@@ -17,7 +17,7 @@ class GameScene: SKScene {
     private var points : [CGPoint] = []
     private var pointer : Pointer!
     private var arrow : Arrow!
-    private var cam : BallCam!
+    private var cam : SKCameraNode!
     
     override func didMove(to view: SKView) {
         
@@ -27,9 +27,11 @@ class GameScene: SKScene {
         self.ball = self.childNode(withName: "//Ball") as! Ball?
         self.tileMap = self.childNode(withName: "//TileMap") as! SKTileMapNode?
         self.switchButton = self.childNode(withName: "//SwitchButton") as! SKSpriteNode?
-        self.cam = BallCam(boundsIn: Bounds(map: tileMap), ballIn: ball)
+        self.cam = self.childNode(withName: "cam") as! SKCameraNode?
         
         self.camera = cam
+        self.camera?.constraints = BallCam.genBounds(ballMap: self.tileMap, scene: self, ball: self.ball)
+            
         TerrainBuilder.createFromMap(tileMap: tileMap, scene: self)
     }
     
@@ -82,8 +84,6 @@ class GameScene: SKScene {
     override func update(_ currentTime: TimeInterval) {
         // Called before each frame is rendered
         
-        cam.autoMove()
-        
         if !(ball.moving()) {
             if ball.physicsBody!.isDynamic {
                 SKAction.wait(forDuration: 1.0)
@@ -116,8 +116,11 @@ class GameScene: SKScene {
     }
 
     func withinSwitch(touch: CGPoint) -> Bool {
+        let adjustedTouch = CGPoint(x: touch.x - cam.position.x, y: touch.y - cam.position.y)
         let buttonRect = switchButton?.calculateAccumulatedFrame()
-        return (buttonRect?.contains(touch))!
+        print("Touched: \(adjustedTouch)")
+        print("Switch Button position: \(switchButton.position)")
+        return (buttonRect?.contains(adjustedTouch))!
     }
     
 }

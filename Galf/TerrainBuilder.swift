@@ -126,6 +126,7 @@ struct TerrainBuilder {
             // create the shape
             let ground = SKShapeNode(splinePoints: &points, count: points.count)
             ground.lineWidth = 5
+            // ground.strokeColor = SKColor.clear
             ground.physicsBody = SKPhysicsBody(edgeChainFrom: ground.path!)
             ground.physicsBody?.isDynamic = false
             
