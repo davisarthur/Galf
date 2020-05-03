@@ -134,7 +134,7 @@ struct TerrainBuilder {
             // create the shape
             let ground = SKShapeNode(splinePoints: &points, count: points.count)
             ground.lineWidth = 5
-            // ground.strokeColor = SKColor.clear
+            ground.strokeColor = SKColor.clear
             ground.physicsBody = SKPhysicsBody(edgeChainFrom: ground.path!)
             ground.physicsBody?.isDynamic = false
             
@@ -354,6 +354,7 @@ struct TerrainBuilder {
     }
     
     static func createCup(center: CGPoint, pin: SKSpriteNode) -> SKShapeNode {
+        pin.position.y = center.y + pin.size.height / 2
         let left = CGPoint(x: center.x - 16.0, y: center.y)
         let leftCup = CGPoint(x: pin.position.x - 7.0, y: center.y)
         let leftCupBot = CGPoint(x: pin.position.x - 7.0, y: center.y - 12.0)
@@ -365,7 +366,7 @@ struct TerrainBuilder {
         // create the shape
         let ground = SKShapeNode(points: &points, count: points.count)
         ground.lineWidth = 5
-        // ground.strokeColor = SKColor.clear
+        ground.strokeColor = SKColor.clear
         ground.physicsBody = SKPhysicsBody(edgeChainFrom: ground.path!)
         ground.physicsBody?.isDynamic = false
         ground.physicsBody?.restitution = Bunker.rest

@@ -19,6 +19,8 @@ class GameScene: SKScene {
     private var arrow : Arrow!
     private var cam : SKCameraNode!
     private var pin: SKSpriteNode!
+    private var hole: Hole!
+    private var teepad: SKSpriteNode!
     
     override func didMove(to view: SKView) {
         
@@ -26,15 +28,21 @@ class GameScene: SKScene {
         self.pointer = self.childNode(withName: "//pointer") as! Pointer?
         self.arrow = self.childNode(withName: "//arrow") as! Arrow?
         self.ball = self.childNode(withName: "//Ball") as! Ball?
-        self.tileMap = self.childNode(withName: "//TileMap") as! SKTileMapNode?
         self.switchButton = self.childNode(withName: "//SwitchButton") as! SKSpriteNode?
         self.cam = self.childNode(withName: "cam") as! SKCameraNode?
-        self.pin = self.childNode(withName: "pin") as! SKSpriteNode?
         
+        self.tileMap = self.childNode(withName: "//TileMap") as! SKTileMapNode?
+        self.pin = self.childNode(withName: "pin") as! SKSpriteNode?
+        self.teepad = self.childNode(withName: "teePad") as! SKSpriteNode?
+        self.hole = Hole(parIn: 4, pinIn: self.pin, teePadIn: teepad)
         self.camera = cam
         self.camera?.constraints = BallCam.genBounds(ballMap: self.tileMap, scene: self, ball: self.ball)
             
         TerrainBuilder.createFromMap(tileMap: tileMap, pin: pin, scene: self)
+        
+        ball.position = teepad.position
+        ball.position.x -= 5.0
+        ball.position.y += 20.0
     }
     
     func touchDown(atPoint pos : CGPoint) {
@@ -56,7 +64,6 @@ class GameScene: SKScene {
                     let fraction = pointer.setPower()
                     launchBall(powFrac: fraction)
                 }
-                print("Outside button")
             }
         }
     }
@@ -85,6 +92,11 @@ class GameScene: SKScene {
     
     override func update(_ currentTime: TimeInterval) {
         // Called before each frame is rendered
+        if (hole.inCup(ballPos: ball.position)) {
+            ball.position = teepad.position
+            ball.position.y += 20.0
+            ball.physicsBody?.velocity = CGVector(dx: 0.0, dy: -1.0)
+        }
         
         if !(ball.moving()) {
             if ball.physicsBody!.isDynamic {
@@ -120,8 +132,6 @@ class GameScene: SKScene {
     func withinSwitch(touch: CGPoint) -> Bool {
         let adjustedTouch = CGPoint(x: touch.x - cam.position.x, y: touch.y - cam.position.y)
         let buttonRect = switchButton?.calculateAccumulatedFrame()
-        print("Touched: \(adjustedTouch)")
-        print("Switch Button position: \(switchButton.position)")
         return (buttonRect?.contains(adjustedTouch))!
     }
     
