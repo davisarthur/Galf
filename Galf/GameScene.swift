@@ -19,28 +19,38 @@ class GameScene: SKScene {
     private var arrow : Arrow!
     private var cam : SKCameraNode!
     private var pin: SKSpriteNode!
-    private var hole: Hole!
-    private var teepad: SKSpriteNode!
+    private var teePad: SKSpriteNode!
+    private var course = GreenerPastures()
+    private var hole : Hole!
     
     override func didMove(to view: SKView) {
         
-        // Initialize pointer, arrow, and tile map
+        // Initialize UI
         self.pointer = self.childNode(withName: "//pointer") as! Pointer?
         self.arrow = self.childNode(withName: "//arrow") as! Arrow?
         self.ball = self.childNode(withName: "//Ball") as! Ball?
         self.switchButton = self.childNode(withName: "//SwitchButton") as! SKSpriteNode?
         self.cam = self.childNode(withName: "cam") as! SKCameraNode?
+        self.camera = cam
         
+        // Initialize hole
         self.tileMap = self.childNode(withName: "//TileMap") as! SKTileMapNode?
         self.pin = self.childNode(withName: "pin") as! SKSpriteNode?
-        self.teepad = self.childNode(withName: "teePad") as! SKSpriteNode?
-        self.hole = Hole(parIn: 4, pinIn: self.pin, teePadIn: teepad)
-        self.camera = cam
+        self.teePad = self.childNode(withName: "teePad") as! SKSpriteNode?
+        loadNextHole()
+    }
+    
+    func loadNextHole() {
+        let newHole = course.nextHole()
+        self.hole = newHole
+        self.tileMap = newHole.tileMap
+        self.pin = newHole.pin
+        self.teePad = newHole.teePad
         self.camera?.constraints = BallCam.genBounds(ballMap: self.tileMap, scene: self, ball: self.ball)
             
         TerrainBuilder.createFromMap(tileMap: tileMap, pin: pin, scene: self)
         
-        ball.position = teepad.position
+        ball.position = teePad.position
         ball.position.x -= 5.0
         ball.position.y += 20.0
     }
@@ -93,7 +103,7 @@ class GameScene: SKScene {
     override func update(_ currentTime: TimeInterval) {
         // Called before each frame is rendered
         if (hole.inCup(ballPos: ball.position)) {
-            ball.position = teepad.position
+            ball.position = teePad.position
             ball.position.y += 20.0
             ball.physicsBody?.velocity = CGVector(dx: 0.0, dy: -1.0)
         }

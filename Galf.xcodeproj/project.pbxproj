@@ -24,7 +24,10 @@
 		6F6B4E7523AAA2B300417678 /* GalfTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F6B4E7423AAA2B300417678 /* GalfTests.swift */; };
 		6F76A15A245D3881009D7962 /* MainMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F76A159245D3881009D7962 /* MainMenu.swift */; };
 		6F76A160245D4254009D7962 /* SNButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F76A15F245D4254009D7962 /* SNButton.swift */; };
-		6F76A162245E25CF009D7962 /* Editor.sks in Resources */ = {isa = PBXBuildFile; fileRef = 6F76A161245E25CF009D7962 /* Editor.sks */; };
+		6F76A162245E25CF009D7962 /* GP1.sks in Resources */ = {isa = PBXBuildFile; fileRef = 6F76A161245E25CF009D7962 /* GP1.sks */; };
+		6F76A164245E78F8009D7962 /* Course.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F76A163245E78F8009D7962 /* Course.swift */; };
+		6F76A166245E85E5009D7962 /* GreenerPastures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F76A165245E85E5009D7962 /* GreenerPastures.swift */; };
+		6F76A16A245E8F04009D7962 /* GP2.sks in Resources */ = {isa = PBXBuildFile; fileRef = 6F76A169245E8F04009D7962 /* GP2.sks */; };
 		6F7B6BF22425B4E0003DE123 /* Hole.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F7B6BF12425B4E0003DE123 /* Hole.swift */; };
 		6FA1D2BB23BF0ED200D15283 /* Arrow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FA1D2BA23BF0ED200D15283 /* Arrow.swift */; };
 		6FB4BCC723B5CF340043D102 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6FB4BCC623B5CF340043D102 /* Assets.xcassets */; };
@@ -65,7 +68,10 @@
 		6F6B4E7623AAA2B300417678 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6F76A159245D3881009D7962 /* MainMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenu.swift; sourceTree = "<group>"; };
 		6F76A15F245D4254009D7962 /* SNButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SNButton.swift; sourceTree = "<group>"; };
-		6F76A161245E25CF009D7962 /* Editor.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Editor.sks; sourceTree = "<group>"; };
+		6F76A161245E25CF009D7962 /* GP1.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GP1.sks; sourceTree = "<group>"; };
+		6F76A163245E78F8009D7962 /* Course.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Course.swift; sourceTree = "<group>"; };
+		6F76A165245E85E5009D7962 /* GreenerPastures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GreenerPastures.swift; sourceTree = "<group>"; };
+		6F76A169245E8F04009D7962 /* GP2.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GP2.sks; sourceTree = "<group>"; };
 		6F7B6BF12425B4E0003DE123 /* Hole.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Hole.swift; sourceTree = "<group>"; };
 		6FA1D2BA23BF0ED200D15283 /* Arrow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Arrow.swift; sourceTree = "<group>"; };
 		6FB4BCC623B5CF340043D102 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -116,7 +122,7 @@
 				6FB4BCC623B5CF340043D102 /* Assets.xcassets */,
 				6F6B4E6123AAA2B000417678 /* GameViewController.swift */,
 				6F76A15F245D4254009D7962 /* SNButton.swift */,
-				6F76A161245E25CF009D7962 /* Editor.sks */,
+				6F76A167245E8776009D7962 /* Courses */,
 				6F76A15E245D38D7009D7962 /* MainMenu */,
 				6F76A15B245D389E009D7962 /* GameScene */,
 				6F76A157245D3057009D7962 /* Ball */,
@@ -164,6 +170,7 @@
 				6FB4BCCC23B5D88F0043D102 /* Terrain.sks */,
 				6FEF6E1D23C2A89C00BF81CF /* TerrainBuilder.swift */,
 				6F7B6BF12425B4E0003DE123 /* Hole.swift */,
+				6F76A163245E78F8009D7962 /* Course.swift */,
 			);
 			name = Construction;
 			sourceTree = "<group>";
@@ -196,6 +203,24 @@
 				6F76A159245D3881009D7962 /* MainMenu.swift */,
 			);
 			name = MainMenu;
+			sourceTree = "<group>";
+		};
+		6F76A167245E8776009D7962 /* Courses */ = {
+			isa = PBXGroup;
+			children = (
+				6F76A168245E8788009D7962 /* GreenerPastures */,
+			);
+			name = Courses;
+			sourceTree = "<group>";
+		};
+		6F76A168245E8788009D7962 /* GreenerPastures */ = {
+			isa = PBXGroup;
+			children = (
+				6F76A165245E85E5009D7962 /* GreenerPastures.swift */,
+				6F76A161245E25CF009D7962 /* GP1.sks */,
+				6F76A169245E8F04009D7962 /* GP2.sks */,
+			);
+			name = GreenerPastures;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -279,9 +304,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6F76A162245E25CF009D7962 /* Editor.sks in Resources */,
+				6F76A162245E25CF009D7962 /* GP1.sks in Resources */,
 				6FB4BCCD23B5D88F0043D102 /* Terrain.sks in Resources */,
 				6F6B4E6523AAA2B000417678 /* Main.storyboard in Resources */,
+				6F76A16A245E8F04009D7962 /* GP2.sks in Resources */,
 				6F6B4E5C23AAA2B000417678 /* GameScene.sks in Resources */,
 				6F6B4E6A23AAA2B300417678 /* LaunchScreen.storyboard in Resources */,
 				6FB4BCC723B5CF340043D102 /* Assets.xcassets in Resources */,
@@ -312,7 +338,9 @@
 				6F7B6BF22425B4E0003DE123 /* Hole.swift in Sources */,
 				6F52F9E423C99C68002D6099 /* Rough.swift in Sources */,
 				6F6B4E6023AAA2B000417678 /* GameScene.swift in Sources */,
+				6F76A164245E78F8009D7962 /* Course.swift in Sources */,
 				6F52F9E823C99F66002D6099 /* Green.swift in Sources */,
+				6F76A166245E85E5009D7962 /* GreenerPastures.swift in Sources */,
 				6F76A160245D4254009D7962 /* SNButton.swift in Sources */,
 				6FA1D2BB23BF0ED200D15283 /* Arrow.swift in Sources */,
 				6F76A15A245D3881009D7962 /* MainMenu.swift in Sources */,
