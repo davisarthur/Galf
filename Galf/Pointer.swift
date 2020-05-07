@@ -29,6 +29,10 @@ class Pointer: SKSpriteNode {
         return power
     }
     
+    func hide() {
+        isHidden = true
+    }
+    
     func move() {
          if position.y >= min && position.y <= max {
              position.y += delta
@@ -42,6 +46,7 @@ class Pointer: SKSpriteNode {
      }
     
     func reset() {
+        isHidden = false
         set = false
         position.y = min
     }

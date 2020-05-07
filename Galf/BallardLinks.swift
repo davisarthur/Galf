@@ -10,9 +10,9 @@ import Foundation
 import SpriteKit
 import GameplayKit
 
-struct GreenerPastures {
+struct BallardLinks {
     
-    let holeScenes = [SKScene(fileNamed: "GP1"), SKScene(fileNamed: "GP2")]
+    let holeScenes = [SKScene(fileNamed: "BL1"), SKScene(fileNamed: "BL2")]
     var holes: [Hole] = []
     var cursor = 0
     
@@ -38,6 +38,10 @@ struct GreenerPastures {
         let nextHole = holes[cursor]
         cursor += 1
         return nextHole
+    }
+    
+    func hasNextHole() -> Bool {
+        return cursor < holes.count
     }
     
 }

@@ -36,4 +36,9 @@ class Hole {
         return false
     }
     
+    func getPar() -> Int {
+        return par
+    }
+    
+    
 }
