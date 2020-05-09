@@ -55,7 +55,7 @@
 		6F52F9E523C99F20002D6099 /* Fairway.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fairway.swift; sourceTree = "<group>"; };
 		6F52F9E723C99F66002D6099 /* Green.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Green.swift; sourceTree = "<group>"; };
 		6F52F9E923C99F9F002D6099 /* Bunker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bunker.swift; sourceTree = "<group>"; };
-		6F6B4E5623AAA2AF00417678 /* Galf.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Galf.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		6F6B4E5623AAA2AF00417678 /* Ball Golf .app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Ball Golf .app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6F6B4E5923AAA2B000417678 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		6F6B4E5B23AAA2B000417678 /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
 		6F6B4E5D23AAA2B000417678 /* Actions.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Actions.sks; sourceTree = "<group>"; };
@@ -112,7 +112,7 @@
 		6F6B4E5723AAA2AF00417678 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				6F6B4E5623AAA2AF00417678 /* Galf.app */,
+				6F6B4E5623AAA2AF00417678 /* Ball Golf .app */,
 				6F6B4E7023AAA2B300417678 /* GalfTests.xctest */,
 			);
 			name = Products;
@@ -243,7 +243,7 @@
 			);
 			name = Galf;
 			productName = Galf;
-			productReference = 6F6B4E5623AAA2AF00417678 /* Galf.app */;
+			productReference = 6F6B4E5623AAA2AF00417678 /* Ball Golf .app */;
 			productType = "com.apple.product-type.application";
 		};
 		6F6B4E6F23AAA2B300417678 /* GalfTests */ = {
@@ -519,7 +519,7 @@
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = DavDev.Galf;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "Ball Golf ";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -538,7 +538,7 @@
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = DavDev.Galf;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "Ball Golf ";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

@@ -37,8 +37,8 @@ class GameScene: SKScene {
         self.switchButton = self.childNode(withName: "//SwitchButton") as! SKSpriteNode?
         self.cam = self.childNode(withName: "cam") as! SKCameraNode?
         self.camera = cam
-        self.ui = self.childNode(withName: "//ui") as! UI?
-        ui.setUp(sceneIn: self)
+        self.ui = self.childNode(withName: "//UI") as! UI?
+        ui.setUp()
         ui.updatePlayer(playerName: "Dave Dog")
         
         // Initialize first hole
@@ -73,6 +73,7 @@ class GameScene: SKScene {
     }
     
     func deleteLastHole() {
+        ui.updateScore()
         self.hole = nil
         for child in self.children {
             if child.name == nil {
