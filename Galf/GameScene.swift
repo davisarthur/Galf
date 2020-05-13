@@ -25,6 +25,7 @@ class GameScene: SKScene {
     private var hole : Hole!
     private var ui : UI!
     private var currentHole = 0
+    private var builder: TerrainBuilder!
     
     override func didMove(to view: SKView) {
         
@@ -65,7 +66,8 @@ class GameScene: SKScene {
         self.addChild(teePad)
         self.camera?.constraints = BallCam.genBounds(ballMap: self.tileMap, scene: self, ball: self.ball)
             
-        TerrainBuilder.createFromMap(tileMap: tileMap, pin: pin, scene: self)
+        builder = TerrainBuilder(mapIn: tileMap, pinIn: pin, sceneIn: self)
+        builder.build()
         
         ball.position = teePad.position
         ball.position.x -= 5.0

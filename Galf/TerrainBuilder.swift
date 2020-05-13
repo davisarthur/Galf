@@ -39,338 +39,143 @@ extension String {
 // Above are necessary extensions to the String class to ease code reading
 struct TerrainBuilder {
     
-    static func createFromMap(tileMap: SKTileMapNode, pin: SKSpriteNode, scene: GameScene) {
-        let pinPos = CGPoint(x: pin.position.x, y: pin.position.y - 30.0)
-        let pinRow = tileMap.tileRowIndex(fromPosition: pinPos)
-        let pinCol = tileMap.tileColumnIndex(fromPosition: pinPos)
-        for col in 0...tileMap.numberOfColumns - 1 {
-            for ro in 0...tileMap.numberOfRows - 1 {
-                if (col == pinCol && ro == pinRow) {
-                    let newTile = createCup(center: tileMap.centerOfTile(atColumn: col, row: ro), pin: pin)
-                    scene.addChild(newTile)
-                    continue
-                }
-                let def = tileMap.tileDefinition(atColumn: col, row: ro)?.name
-                if def != nil {
-                    let newTile = buildTile(tileCode: def!, tileCenter: tileMap.centerOfTile(atColumn: col, row: ro))
-                    if newTile != nil {
-                        scene.addChild(newTile!)
-                    }
+    var map: SKTileMapNode
+    var pin: SKSpriteNode
+    var visited = [[Bool]]()
+    var scene: GameScene
+    
+    init(mapIn: SKTileMapNode, pinIn: SKSpriteNode, sceneIn: GameScene) {
+        map = mapIn
+        pin = pinIn
+        scene = sceneIn
+        visited = [[Bool]](repeating: [Bool](repeating: false, count: map.numberOfColumns), count: map.numberOfRows)
+    }
+    
+    mutating func build() {
+        var terrainPoints = [CGPoint]()
+        var islands = [SKShapeNode]()
+        for col in 0...map.numberOfRows - 1 {
+            for row in 0...map.numberOfRows - 1 {
+                let def = map.tileDefinition(atColumn: col, row: row)
+                if def != nil && visited[row][col] == false {
+                    dfs(start: Tile(xIn: col, yIn: row, mapIn: map, code: (def?.name!)!), points: &terrainPoints)
+                    print("Terrain Points: ")
+                    print(terrainPoints)
+                    islands.append(SKShapeNode(points: &terrainPoints, count: terrainPoints.count))
+                    islands.last!.lineWidth = 2.0
+                    islands.last!.strokeColor = SKColor.white
+                    islands.last!.physicsBody = SKPhysicsBody(edgeChainFrom: islands.last!.path!)
+                    islands.last!.physicsBody?.isDynamic = false
                 }
             }
         }
+        for island in islands {
+            scene.addChild(island)
+        }
     }
     
-    static func buildTile(tileCode: String, tileCenter: CGPoint) -> SKShapeNode? {
-        let data = read(code: tileCode)
-        let texture = data[0]
-        let shape = data[1]
-        var points: [CGPoint]
-        points = []
+    // Depth first search used to generate terrain
+    private mutating func dfs(start: Tile, points: inout [CGPoint]) {
+        if (isVisited(tileIn: start)) {
+            return
+        }
+        visit(tileIn: start)
+        process(newTile: start, points: &points)
         
-        // set shape
-        if shape == "1" {
-            points = create1(center: tileCenter)
-        }
-        else if shape == "2" || shape == "8" {
-            points = create2or8(center: tileCenter)
-        }
-        else if shape == "3" {
-            points = create3(center: tileCenter)
-        }
-        else if shape == "4" || shape == "6" {
-            points = create4or6(center: tileCenter)
-        }
-        else if shape == "5" {
-            print("Center tile, no points")
-        }
-        else if shape == "7" {
-            points = create7(center: tileCenter)
-        }
-        else if shape == "9" {
-            points = create9(center: tileCenter)
-        }
-        else if shape == "10A" {
-            points = create10A(center: tileCenter)
-        }
-        else if shape == "10B" {
-            points = create10B(center: tileCenter)
-        }
-        else if shape == "10C" {
-            points = create10C(center: tileCenter)
-        }
-        else if shape == "11A" {
-            points = create11A(center: tileCenter)
-        }
-        else if shape == "11B" {
-            points = create11B(center: tileCenter)
-        }
-        else if shape == "11C" {
-            points = create11C(center: tileCenter)
-        }
-        else if shape == "12A" {
-            points = create12A(center: tileCenter)
-        }
-        else if shape == "12B" {
-            points = create12B(center: tileCenter)
-        }
-        else if shape == "12C" {
-            points = create12C(center: tileCenter)
-        }
-        else if shape == "13A" {
-            points = create13A(center: tileCenter)
-        }
-        else if shape == "13B" {
-            points = create13B(center: tileCenter)
-        }
-        else if shape == "13C" {
-            points = create13C(center: tileCenter)
-        }
-        else {
-            print("Error: Invalid shape code")
+        for neighbor in start.getNeighbors() {
+            dfs(start: neighbor, points: &points)
         }
         
-        if points.count > 0 {
-            // create the shape
-            let ground = SKShapeNode(splinePoints: &points, count: points.count)
-            ground.lineWidth = 5
-            ground.strokeColor = SKColor.clear
-            ground.physicsBody = SKPhysicsBody(edgeChainFrom: ground.path!)
-            ground.physicsBody?.isDynamic = false
-            
-            // set ground type
-            if texture == "R" {
-                ground.physicsBody?.restitution = Rough.rest
-            }
-            else if texture == "F" {
-                ground.physicsBody?.restitution = Fairway.rest
-            }
-            else if texture == "G" {
-                ground.physicsBody?.restitution = Green.rest
-            }
-            else if texture == "B" {
-                ground.physicsBody?.restitution = Bunker.rest
-            }
-            else if texture == "W" {
-                print("Water tile")
-            }
-            else {
-                print("Error: invalid ground type")
-            }
-            
-            return ground
+    }
+    
+    // Has a tile bean visited?
+    private func isVisited(tileIn: Tile) -> Bool {
+        return visited[tileIn.y][tileIn.x]
+    }
+    
+    // Visit a tile
+    private mutating func visit(tileIn: Tile) {
+        visited[tileIn.y][tileIn.x] = true
+    }
+    
+    // Process a new tile
+    private func process(newTile: Tile, points: inout [CGPoint]) {
+        if (newTile.shapePoints == nil) {
+            return
         }
-        else {
-            return nil
+        if (containsPin(tileIn: newTile)) {
+            let cupPoints = createCup(center: map.centerOfTile(atColumn: newTile.x, row: newTile.y))
+            if (points.isEmpty) {
+                points += cupPoints
+            }
+            else if (points.last!.equalTo(cupPoints.first!)) {
+                points += cupPoints
+            }
+            else if (points.last!.equalTo(cupPoints.last!)) {
+                points += reverse(pointsIn: cupPoints)
+            }
+            else if (points.first!.equalTo(cupPoints.first!)) {
+                points = reverse(pointsIn: cupPoints) + points
+            }
+            else if (points.first!.equalTo(cupPoints.last!)) {
+                points = cupPoints + points
+            }
+        }
+        else if (points.isEmpty) {
+            points += newTile.shapePoints!
+        }
+        else if (points.last!.equalTo(newTile.shapePoints!.first!)) {
+            points += newTile.shapePoints!
+        }
+        else if (points.last!.equalTo(newTile.shapePoints!.last!)) {
+            points += reverse(pointsIn: newTile.shapePoints!)
+        }
+        else if (points.first!.equalTo(newTile.shapePoints!.first!)) {
+            points = reverse(pointsIn: newTile.shapePoints!) + points
+        }
+        else if (points.first!.equalTo(newTile.shapePoints!.last!)) {
+            points = newTile.shapePoints! + points
         }
     }
     
-    static func read(code: String) -> [String] {
-        let texture = String(code[0])
-        let shape = String(code[1...])
-        print("Texture: \(texture) , Shape: \(shape)")
-        return [texture, shape]
-    }
-    
-    static func create1(center: CGPoint) -> [CGPoint] {
-        var output : [CGPoint] = []
-        let left = CGPoint(x: center.x, y: center.y - 16.0)
-        let middle = CGPoint(x: center.x + 8.0, y: center.y - 4.0)
-        let right = CGPoint(x: center.x + 16.0, y: center.y)
-        output.append(left)
-        output.append(middle)
-        output.append(right)
-        return output
-    }
-    
-    // Tiles with shape 2 or 8 have the same collider
-    static func create2or8(center: CGPoint) -> [CGPoint] {
-        var output : [CGPoint] = []
-        let left = CGPoint(x: center.x - 16.0, y: center.y)
-        let right = CGPoint(x: center.x + 16.0, y: center.y)
-        output.append(left)
-        output.append(right)
-        return output
-    }
-    
-    static func create3(center: CGPoint) -> [CGPoint] {
-        var output : [CGPoint] = []
-        let left = CGPoint(x: center.x - 16.0, y: center.y)
-        let middle = CGPoint(x: center.x - 8.0, y: center.y - 4.0)
-        let right = CGPoint(x: center.x, y: center.y - 16.0)
-        output.append(left)
-        output.append(middle)
-        output.append(right)
-        return output
-    }
-    
-    // Tiles with shape 4 or 6 have the same collider
-    static func create4or6(center: CGPoint) -> [CGPoint] {
-        var output : [CGPoint] = []
-        let top = CGPoint(x: center.x, y: center.y + 16.0)
-        let bottom = CGPoint(x: center.x, y: center.y - 16.0)
-        output.append(top)
-        output.append(bottom)
-        return output
-    }
-    
-    // Tile 5 has no collider
-    static func create7(center: CGPoint) -> [CGPoint] {
-        var output : [CGPoint] = []
-        let left = CGPoint(x: center.x, y: center.y + 16.0)
-        let middle = CGPoint(x: center.x + 8.0, y: center.y + 4.0)
-        let right = CGPoint(x: center.x + 16.0, y: center.y)
-        output.append(left)
-        output.append(middle)
-        output.append(right)
-        return output
-    }
-    
-    static func create9(center: CGPoint) -> [CGPoint] {
-        var output : [CGPoint] = []
-        let left = CGPoint(x: center.x - 16.0, y: center.y)
-        let middle = CGPoint(x: center.x - 8.0, y: center.y + 4.0)
-        let right = CGPoint(x: center.x, y: center.y + 16.0)
-        output.append(left)
-        output.append(middle)
-        output.append(right)
-        return output
-    }
-    
-    static func create10A(center: CGPoint) -> [CGPoint] {
-        var output : [CGPoint] = []
-        let left = CGPoint(x: center.x, y: center.y - 16.0)
-        let middle = CGPoint(x: center.x + 8.0, y: center.y - 4.0)
-        let right = CGPoint(x: center.x + 16.0, y: center.y)
-        output.append(left)
-        output.append(middle)
-        output.append(right)
-        return output
-    }
-    
-    static func create10B(center: CGPoint) -> [CGPoint] {
-        var output : [CGPoint] = []
-        let left = CGPoint(x: center.x - 16.0, y: center.y - 16.0)
-        let right = CGPoint(x: center.x, y: center.y + 16.0)
-        output.append(left)
-        output.append(right)
-        return output
-    }
-    
-    static func create10C(center: CGPoint) -> [CGPoint] {
-        var output : [CGPoint] = []
-        let left = CGPoint(x: center.x, y: center.y - 16.0)
-        let right = CGPoint(x: center.x + 16.0, y: center.y + 16.0)
-        output.append(left)
-        output.append(right)
-        return output
-    }
-    
-    static func create11A(center: CGPoint) -> [CGPoint] {
-        var output : [CGPoint] = []
-        let left = CGPoint(x: center.x - 16.0, y: center.y)
-        let middle = CGPoint(x: center.x - 8.0, y: center.y - 4.0)
-        let right = CGPoint(x: center.x, y: center.y - 16.0)
-        output.append(left)
-        output.append(middle)
-        output.append(right)
-        return output
-    }
-    
-    static func create11B(center: CGPoint) -> [CGPoint] {
-        var output : [CGPoint] = []
-        let left = CGPoint(x: center.x, y: center.y + 16.0)
-        let right = CGPoint(x: center.x + 16.0, y: center.y - 16.0)
-        output.append(left)
-        output.append(right)
-        return output
-    }
-    
-    static func create11C(center: CGPoint) -> [CGPoint] {
-        var output : [CGPoint] = []
-        let left = CGPoint(x: center.x - 16.0, y: center.y + 16.0)
-        let right = CGPoint(x: center.x, y: center.y - 16.0)
-        output.append(left)
-        output.append(right)
-        return output
-    }
-    
-    static func create12A(center: CGPoint) -> [CGPoint] {
-        var output : [CGPoint] = []
-        let left = CGPoint(x: center.x, y: center.y + 16.0)
-        let middle = CGPoint(x: center.x + 8.0, y: center.y + 4.0)
-        let right = CGPoint(x: center.x + 16.0, y: center.y)
-        output.append(left)
-        output.append(middle)
-        output.append(right)
-        return output
-    }
-    
-    static func create12B(center: CGPoint) -> [CGPoint] {
-        var output : [CGPoint] = []
-        let left = CGPoint(x: center.x - 16.0, y: center.y + 16.0)
-        let right = CGPoint(x: center.x, y: center.y - 16.0)
-        output.append(left)
-        output.append(right)
-        return output
-    }
-    
-    static func create12C(center: CGPoint) -> [CGPoint] {
-        var output : [CGPoint] = []
-        let left = CGPoint(x: center.x, y: center.y + 16.0)
-        let right = CGPoint(x: center.x + 16.0, y: center.y - 16.0)
-        output.append(left)
-        output.append(right)
-        return output
-    }
-    
-    static func create13A(center: CGPoint) -> [CGPoint] {
-        var output : [CGPoint] = []
-        let left = CGPoint(x: center.x - 16.0, y: center.y)
-        let middle = CGPoint(x: center.x - 8.0, y: center.y + 4.0)
-        let right = CGPoint(x: center.x, y: center.y + 16.0)
-        output.append(left)
-        output.append(middle)
-        output.append(right)
-        return output
-    }
-    
-    static func create13B(center: CGPoint) -> [CGPoint] {
-        var output : [CGPoint] = []
-        let left = CGPoint(x: center.x, y: center.y - 16.0)
-        let right = CGPoint(x: center.x + 16.0, y: center.y + 16.0)
-        output.append(left)
-        output.append(right)
-        return output
-    }
-    
-    static func create13C(center: CGPoint) -> [CGPoint] {
-        var output : [CGPoint] = []
-        let left = CGPoint(x: center.x - 16.0, y: center.y - 16.0)
-        let right = CGPoint(x: center.x, y: center.y + 16.0)
-        output.append(left)
-        output.append(right)
-        return output
-    }
-    
-    static func createCup(center: CGPoint, pin: SKSpriteNode) -> SKShapeNode {
-        pin.position.y = center.y + pin.size.height / 2
+    // Create the points for the cup
+    private func createCup(center: CGPoint) -> [CGPoint] {
+        pin.position.y = center.y + pin.size.height / 2.3
         let left = CGPoint(x: center.x - 16.0, y: center.y)
         let leftCup = CGPoint(x: pin.position.x - 7.0, y: center.y)
         let leftCupBot = CGPoint(x: pin.position.x - 7.0, y: center.y - 12.0)
         let rightCupBot = CGPoint(x: pin.position.x + 7.0, y: center.y - 12.0)
         let rightCup = CGPoint(x: pin.position.x + 7.0, y: center.y)
         let right = CGPoint(x: center.x + 16.0, y: center.y)
-        var points = [left, leftCup, leftCupBot, rightCupBot, rightCup, right]
-        
-        // create the shape
-        let ground = SKShapeNode(points: &points, count: points.count)
-        ground.lineWidth = 5
-        ground.strokeColor = SKColor.clear
-        ground.physicsBody = SKPhysicsBody(edgeChainFrom: ground.path!)
-        ground.physicsBody?.isDynamic = false
-        ground.physicsBody?.restitution = Bunker.rest
-        
-        return ground
+        return [left, leftCup, leftCupBot, rightCupBot, rightCup, right]
     }
+    
+    // Does a given tile contain the pin?
+    private func containsPin(tileIn: Tile) -> Bool {
+        let pinPos = CGPoint(x: pin.position.x, y: pin.position.y - 30.0)
+        let pinRow = map.tileRowIndex(fromPosition: pinPos)
+        let pinCol = map.tileColumnIndex(fromPosition: pinPos)
+        return tileIn.x == pinCol && tileIn.y == pinRow
+    }
+    
+    
+    // Reverse the order of an array of CGPoints
+    private func reverse(pointsIn: [CGPoint]) -> [CGPoint] {
+        var output = [CGPoint]()
+        for point in pointsIn {
+            output.insert(point, at: 0)
+        }
+        return output
+    }
+    
+    // Are all of the tile points within the gamePoints already
+    private func within(tilePoints: [CGPoint], gamePoints: [CGPoint]) -> Bool {
+        for point in tilePoints {
+            if (!gamePoints.contains(point)) {
+                return false
+            }
+        }
+        return true
+    }
+    
 }
