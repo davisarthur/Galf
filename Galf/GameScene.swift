@@ -11,70 +11,60 @@ import GameplayKit
 
 class GameScene: SKScene {
     
-    private var tileMap : SKTileMapNode! // terrain
+    private var tileMap : SKTileMapNode!
     private var switchButton : SKSpriteNode!
     private var ball : Ball!
-    private var sky : SKSpriteNode!
     private var powerMeter : SKSpriteNode!
     private var pointer : Pointer!
     private var arrow : Arrow!
     private var cam : SKCameraNode!
     private var pin: SKSpriteNode!
     private var teePad: SKSpriteNode!
-    private var course: BallardLinks = BallardLinks()
-    private var hole : Hole!
+    private var hole : Hole?
     private var ui : UI!
-    private var currentHole = 0
     private var builder: TerrainBuilder!
     
     override func didMove(to view: SKView) {
         
         // Initialize UI and basic features
-        self.sky = self.childNode(withName: "//sky") as! SKSpriteNode?
         self.pointer = self.childNode(withName: "//pointer") as! Pointer?
         self.powerMeter = self.childNode(withName: "//powerMeter") as! SKSpriteNode?
         self.arrow = self.childNode(withName: "//arrow") as! Arrow?
-        self.ball = self.childNode(withName: "//Ball") as! Ball?
         self.switchButton = self.childNode(withName: "//SwitchButton") as! SKSpriteNode?
-        self.cam = self.childNode(withName: "cam") as! SKCameraNode?
-        self.camera = cam
-        self.ui = self.childNode(withName: "//UI") as! UI?
-        ui.setUp()
-        ui.updatePlayer(playerName: "Dave Dog")
-        
-        // Initialize first hole
-        loadNextHole()
     }
     
-    func loadNextHole() {
-        currentHole += 1
+    func loadHole(gameHandler: GameHandler) {
         
-        let newHole = course.nextHole()
-        self.hole = newHole
-        ui.loadHole(num: currentHole, holeIn: self.hole)
+        self.hole = gameHandler.course.getHole(holeNum: gameHandler.currentHole)
+        self.ui = self.childNode(withName: "cam")?.childNode(withName: "ui") as! UI?
+        ui.setUp(handlerIn: gameHandler)
         
-        self.tileMap = newHole.tileMap
+        self.tileMap = self.hole?.tileMap
         tileMap.removeFromParent()
         self.addChild(tileMap)
         
-        self.pin = newHole.pin
+        self.pin = self.hole?.pin
         pin.removeFromParent()
         self.addChild(pin)
         
-        self.teePad = newHole.teePad
+        self.teePad = self.hole?.teePad
         teePad.removeFromParent()
         self.addChild(teePad)
+        
+        self.ball = self.childNode(withName: "//Ball") as! Ball?
+        self.cam = self.childNode(withName: "cam") as! SKCameraNode?
+        self.camera = cam
         self.camera?.constraints = BallCam.genBounds(ballMap: self.tileMap, scene: self, ball: self.ball)
             
         builder = TerrainBuilder(mapIn: tileMap, pinIn: pin, sceneIn: self)
         builder.build()
-        
+    
         ball.position = teePad.position
         ball.position.x -= 5.0
         ball.position.y += 20.0
     }
     
-    func deleteLastHole() {
+    /*func deleteLastHole() {
         ui.updateScore()
         self.hole = nil
         for child in self.children {
@@ -86,6 +76,7 @@ class GameScene: SKScene {
         pin.removeFromParent()
         teePad.removeFromParent()
     }
+ */
     
     func touchDown(atPoint pos : CGPoint) {
         if ((ball?.physicsBody!.isDynamic)!) {
@@ -110,38 +101,25 @@ class GameScene: SKScene {
         }
     }
     
-    func touchMoved(toPoint pos : CGPoint) {
-    }
-    
-    func touchUp(atPoint pos : CGPoint) {
-    }
-    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         for t in touches { self.touchDown(atPoint: t.location(in: self)) }
     }
     
-    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for t in touches { self.touchMoved(toPoint: t.location(in: self)) }
-    }
-    
-    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for t in touches { self.touchUp(atPoint: t.location(in: self)) }
-    }
-    
-    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for t in touches { self.touchUp(atPoint: t.location(in: self)) }
-    }
     
     override func update(_ currentTime: TimeInterval) {
-        // Called before each frame is rendered
-        if (hole.inCup(ballPos: ball.position)) {
-            if (course.hasNextHole()) {
-                deleteLastHole()
-                loadNextHole()
-            }
-            ball.position = teePad.position
-            ball.position.y += 20.0
-            ball.physicsBody?.velocity = CGVector(dx: 0.0, dy: -1.0)
+        // hole has not been set up, do nothing
+        if (hole == nil) {
+            return
+        }
+        if (hole!.inCup(ballPos: ball.position)) {
+            loadScorecard()
+            //if (course.hasNextHole()) {
+            //    deleteLastHole()
+            //    loadNextHole()
+            //}
+            //ball.position = teePad.position
+            //ball.position.y += 20.0
+            //ball.physicsBody?.velocity = CGVector(dx: 0.0, dy: -1.0)
         }
         
         if !(ball.moving()) {
@@ -185,6 +163,22 @@ class GameScene: SKScene {
         let adjustedTouch = CGPoint(x: touch.x - cam.position.x, y: touch.y - cam.position.y)
         let buttonRect = switchButton?.calculateAccumulatedFrame()
         return (buttonRect?.contains(adjustedTouch))!
+    }
+    
+    func loadScorecard() {
+        guard let skView = self.view as SKView? else {
+            print("Could not get Skview")
+            return
+        }
+
+        guard let scene = Scorecard(fileNamed: "Scorecard") else {
+            print("Could not make GameScene, check the name is spelled correctly")
+            return
+        }
+
+        scene.scaleMode = .aspectFill
+
+        skView.presentScene(scene)
     }
     
 }

@@ -12,12 +12,29 @@ import GameplayKit
 
 class Course {
     
-    let holes: [Hole]
+    var holes: [Hole] = []
     var par = 0
     
     init(holesIn: [Hole]) {
         holes = holesIn
         par = calculatePar()
+    }
+    
+    init(scenes: [SKScene]) {
+        extract(holeScenes: scenes)
+    }
+    
+    // Extract the data from hole scenes to generate holes hole
+    private func extract(holeScenes: [SKScene]) {
+        for scene in holeScenes {
+            let tileMap = scene.childNode(withName: "tileMap") as! SKTileMapNode
+            let pin = scene.childNode(withName: "pin") as! SKSpriteNode
+            let teePad = scene.childNode(withName: "teePad") as! SKSpriteNode
+            let parLabel = scene.childNode(withName: "par") as! SKLabelNode
+            let par = Int(parLabel.text!)
+            let newHole = Hole(parIn: par!, pinIn: pin, teePadIn: teePad, tileMapIn: tileMap)
+            holes.append(newHole)
+        }
     }
     
     func calculatePar() -> Int {
@@ -26,5 +43,16 @@ class Course {
             output += hole.par
         }
         return output
+    }
+    
+    func getHole(holeNum: Int) -> Hole? {
+        if (!hasHole(holeIn: holeNum)) {
+            return nil
+        }
+        return holes[holeNum - 1]
+    }
+    
+    func hasHole(holeIn: Int) -> Bool {
+        return holeIn <= holes.count
     }
 }

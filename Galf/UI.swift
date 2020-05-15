@@ -12,6 +12,7 @@ import GameplayKit
 
 class UI : SKSpriteNode {
     
+    var handler: GameHandler? = nil
     var parLabel: SKLabelNode = SKLabelNode(text: "")
     var nameLabel: SKLabelNode = SKLabelNode(text: "")
     var holeLabel: SKLabelNode = SKLabelNode(text: "")
@@ -23,20 +24,24 @@ class UI : SKSpriteNode {
         super.init(coder: aDecoder)
     }
     
-    func setUp() {
+    func setUp(handlerIn: GameHandler) {
         addChild(scoreLabel)
+        scoreLabel.text = String(scoreToString(scoreIn: handlerIn.players[0].score))
         scoreLabel.fontSize = CGFloat(22.0)
         scoreLabel.fontColor = UIColor.black
         scoreLabel.position = CGPoint(x: size.width / 7.0, y: size.height / 16.0)
         addChild(parLabel)
+        parLabel.text = String(handlerIn.course.getHole(holeNum: handlerIn.currentHole)!.par)
         parLabel.fontSize = CGFloat(22.0)
         parLabel.fontColor = UIColor.black
         parLabel.position = CGPoint(x: -size.width / 8.0, y: -size.height / 2.5)
         addChild(nameLabel)
+        nameLabel.text = handlerIn.players[0].name
         nameLabel.fontSize = CGFloat(22.0)
         nameLabel.fontColor = UIColor.black
         nameLabel.position = CGPoint(x: -1.0 * size.width / 4.0, y: size.height / 16.0)
         addChild(holeLabel)
+        holeLabel.text = String(handlerIn.currentHole)
         holeLabel.fontSize = CGFloat(22.0)
         holeLabel.fontColor = UIColor.black
         holeLabel.position = CGPoint(x: -1.0 * size.width / 3.1, y: -size.height / 2.5)
@@ -46,8 +51,11 @@ class UI : SKSpriteNode {
         lieLabel.position = CGPoint(x: 0.0, y: -size.height / 2.5)
     }
     
-    func updatePlayer(playerName: String) {
-        nameLabel.text = playerName
+    func scoreToString(scoreIn: Int) -> String {
+        if (scoreIn == 0) {
+            return "E"
+        }
+        return String(scoreIn)
     }
     
     func updateScore() {
@@ -65,12 +73,6 @@ class UI : SKSpriteNode {
             scoreLabel.text = String(newScore)
         }
         
-    }
-    
-    func loadHole(num: Int, holeIn: Hole) {
-        holeLabel.text = String(num)
-        parLabel.text = String(holeIn.getPar())
-        resetStrokes()
     }
     
     func addStroke() {

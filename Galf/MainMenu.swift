@@ -23,19 +23,18 @@ class MainMenu: SKScene {
     }
     
     func touchDown(atPoint pos : CGPoint) {
-        print(pos)
         if (start.contains(pos)) {
-            loadGame()
+            loadSelectScreen()
         }
     }
     
-    func loadGame() {
+    func loadSelectScreen() {
         guard let skView = self.view as SKView? else {
             print("Could not get Skview")
             return
         }
 
-        guard let scene = GameScene(fileNamed:"GameScene") else {
+        guard let scene = SelectScreen(fileNamed:"SelectScreen") else {
             print("Could not make GameScene, check the name is spelled correctly")
             return
         }
