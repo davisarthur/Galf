@@ -26,7 +26,7 @@ class UI : SKSpriteNode {
     
     func setUp(handlerIn: GameHandler) {
         addChild(scoreLabel)
-        scoreLabel.text = String(scoreToString(scoreIn: handlerIn.players[0].score))
+        scoreLabel.text = String(scoreToString(scoreIn: handlerIn.players[0].totalScore))
         scoreLabel.fontSize = CGFloat(22.0)
         scoreLabel.fontColor = UIColor.black
         scoreLabel.position = CGPoint(x: size.width / 7.0, y: size.height / 16.0)

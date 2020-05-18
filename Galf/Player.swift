@@ -13,7 +13,8 @@ import GameplayKit
 class Player {
     
     let name: String
-    var score = 0
+    var scores = [Int]()
+    var totalScore = 0
     
     init(nameIn: String) {
         name = nameIn

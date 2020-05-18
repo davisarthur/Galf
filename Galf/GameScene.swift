@@ -23,6 +23,7 @@ class GameScene: SKScene {
     private var hole : Hole?
     private var ui : UI!
     private var builder: TerrainBuilder!
+    private var handler: GameHandler!
     
     override func didMove(to view: SKView) {
         
@@ -35,9 +36,11 @@ class GameScene: SKScene {
     
     func loadHole(gameHandler: GameHandler) {
         
-        self.hole = gameHandler.course.getHole(holeNum: gameHandler.currentHole)
+        self.hole = gameHandler.getNextHole()
         self.ui = self.childNode(withName: "cam")?.childNode(withName: "ui") as! UI?
-        ui.setUp(handlerIn: gameHandler)
+        
+        self.handler = gameHandler
+        ui.setUp(handlerIn: self.handler)
         
         self.tileMap = self.hole?.tileMap
         tileMap.removeFromParent()
@@ -63,20 +66,6 @@ class GameScene: SKScene {
         ball.position.x -= 5.0
         ball.position.y += 20.0
     }
-    
-    /*func deleteLastHole() {
-        ui.updateScore()
-        self.hole = nil
-        for child in self.children {
-            if child.name == nil {
-                child.removeFromParent()
-            }
-        }
-        tileMap.removeFromParent()
-        pin.removeFromParent()
-        teePad.removeFromParent()
-    }
- */
     
     func touchDown(atPoint pos : CGPoint) {
         if ((ball?.physicsBody!.isDynamic)!) {
@@ -112,14 +101,9 @@ class GameScene: SKScene {
             return
         }
         if (hole!.inCup(ballPos: ball.position)) {
+            self.handler.players[0].scores.append(Int(ui.lieLabel.text!)!)
+            handler.updateTotalScore()
             loadScorecard()
-            //if (course.hasNextHole()) {
-            //    deleteLastHole()
-            //    loadNextHole()
-            //}
-            //ball.position = teePad.position
-            //ball.position.y += 20.0
-            //ball.physicsBody?.velocity = CGVector(dx: 0.0, dy: -1.0)
         }
         
         if !(ball.moving()) {
@@ -175,7 +159,8 @@ class GameScene: SKScene {
             print("Could not make GameScene, check the name is spelled correctly")
             return
         }
-
+        
+        scene.setHandler(handlerIn: handler)
         scene.scaleMode = .aspectFill
 
         skView.presentScene(scene)

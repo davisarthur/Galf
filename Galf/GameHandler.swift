@@ -30,4 +30,16 @@ class GameHandler {
         return course.getHole(holeNum: currentHole)!
     }
     
+    func updateTotalScore() {
+        let scores = players[0].scores
+        var pars = [Int]()
+        for hole in self.course.holes {
+            pars.append(hole.getPar())
+        }
+        var netScore = 0
+        for i in 0...scores.count - 1 {
+            netScore += scores[i] - pars[i]
+        }
+        players[0].totalScore = netScore
+    }
 }

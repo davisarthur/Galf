@@ -52,20 +52,20 @@ struct TerrainBuilder {
     }
     
     mutating func build() {
-        var terrainPoints = [CGPoint]()
         var islands = [SKShapeNode]()
         for col in 0...map.numberOfRows - 1 {
             for row in 0...map.numberOfRows - 1 {
                 let def = map.tileDefinition(atColumn: col, row: row)
                 if def != nil && visited[row][col] == false {
+                    var terrainPoints = [CGPoint]()
                     dfs(start: Tile(xIn: col, yIn: row, mapIn: map, code: (def?.name!)!), points: &terrainPoints)
-                    print("Terrain Points: ")
-                    print(terrainPoints)
-                    islands.append(SKShapeNode(points: &terrainPoints, count: terrainPoints.count))
-                    islands.last!.lineWidth = 2.0
-                    islands.last!.strokeColor = SKColor.clear
-                    islands.last!.physicsBody = SKPhysicsBody(edgeChainFrom: islands.last!.path!)
-                    islands.last!.physicsBody?.isDynamic = false
+                    if terrainPoints.count > 1 {
+                        islands.append(SKShapeNode(points: &terrainPoints, count: terrainPoints.count))
+                        islands.last!.lineWidth = 2.0
+                        islands.last!.strokeColor = SKColor.clear
+                        islands.last!.physicsBody = SKPhysicsBody(edgeChainFrom: islands.last!.path!)
+                        islands.last!.physicsBody?.isDynamic = false
+                    }
                 }
             }
         }
