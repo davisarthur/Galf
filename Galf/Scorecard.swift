@@ -49,6 +49,7 @@ class Scorecard: SKScene {
         par.fontSize = CGFloat(64.0)
         par.fontColor = UIColor.black
         par.position = CGPoint(x: -size.width / 5.0 * 0.8, y: size.height / 40.0 * 0.55)
+        par.zPosition = CGFloat(15.0)
         
         addChild(score)
         var scores = [Int]()
@@ -59,12 +60,14 @@ class Scorecard: SKScene {
         score.fontSize = CGFloat(64.0)
         score.fontColor = UIColor.black
         score.position = CGPoint(x: -size.width / 5.0 * 0.8, y: -size.height / 8.0 * 0.95)
+        score.zPosition = CGFloat(15.0)
         
         addChild(player)
         player.text = handler.players[0].name
         player.fontSize = CGFloat(64.0)
         player.fontColor = UIColor.black
         player.position = CGPoint(x: -size.width / 4.0 * 1.1, y: -size.height / 8.0 * 0.95)
+        player.zPosition = CGFloat(15.0)
     }
     
     func holesToString(scoresIn: [Int]) -> String {

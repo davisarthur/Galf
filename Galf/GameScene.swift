@@ -9,7 +9,7 @@
 import SpriteKit
 import GameplayKit
 
-class GameScene: SKScene {
+class GameScene: SKScene, SKPhysicsContactDelegate {
     
     private var tileMap : SKTileMapNode!
     private var switchButton : SKSpriteNode!
@@ -28,6 +28,7 @@ class GameScene: SKScene {
     override func didMove(to view: SKView) {
         
         // Initialize UI and basic features
+        self.physicsWorld.contactDelegate = self
         self.pointer = self.childNode(withName: "//pointer") as! Pointer?
         self.powerMeter = self.childNode(withName: "//powerMeter") as! SKSpriteNode?
         self.arrow = self.childNode(withName: "//arrow") as! Arrow?
@@ -55,16 +56,26 @@ class GameScene: SKScene {
         self.addChild(teePad)
         
         self.ball = self.childNode(withName: "//Ball") as! Ball?
+        ball.physicsBody?.categoryBitMask = 1
         self.cam = self.childNode(withName: "cam") as! SKCameraNode?
         self.camera = cam
         self.camera?.constraints = BallCam.genBounds(ballMap: self.tileMap, scene: self, ball: self.ball)
             
         builder = TerrainBuilder(mapIn: tileMap, pinIn: pin, sceneIn: self)
         builder.build()
-    
+        
+        for child in self.children {
+            if (child.name == nil) {
+                child.physicsBody?.contactTestBitMask = ball.physicsBody?.contactTestBitMask as! UInt32
+                child.physicsBody?.collisionBitMask = ball.physicsBody?.collisionBitMask as! UInt32
+                child.physicsBody?.categoryBitMask = 2
+            }
+        }
+        
         ball.position = teePad.position
         ball.position.x -= 5.0
         ball.position.y += 20.0
+        
     }
     
     func touchDown(atPoint pos : CGPoint) {
@@ -100,13 +111,24 @@ class GameScene: SKScene {
         if (hole == nil) {
             return
         }
+        // if the ball is in the cup, load the scorecard
         if (hole!.inCup(ballPos: ball.position)) {
             self.handler.players[0].scores.append(Int(ui.lieLabel.text!)!)
             handler.updateTotalScore()
             loadScorecard()
+            return
         }
         
+        // if there was a penalty move the ball to previous position
+        if (ball.penalty) {
+            ball.penalty(uiIn: &ui)
+            ball.penalty = false
+        }
+        
+        // If the ball is not moving
         if !(ball.moving()) {
+            ball.hasHitGround = false
+            ball.defaultPhysics()
             if ball.physicsBody!.isDynamic {
                 SKAction.wait(forDuration: 1.0)
                 if !(ball.moving()) {
@@ -119,11 +141,21 @@ class GameScene: SKScene {
             else if !(pointer.set) {
                 pointer.move()
             }
+            return
         }
+        
+        if (ball.hasHitGround) {
+            let ballRow = tileMap.tileRowIndex(fromPosition: ball.position)
+            let ballCol = tileMap.tileColumnIndex(fromPosition: ball.position)
+            let ballTileDef = tileMap.tileDefinition(atColumn: ballCol, row: ballRow)
+            ball.updatePhysics(tileNameIn: ballTileDef?.name)
+        }
+        
     }
     
     func launchBall(powFrac: CGFloat) {
         ui.addStroke()
+        ball.prevPos = ball.position
         arrow.hide()
         pointer.hide()
         switchButton.isHidden = true
@@ -144,7 +176,7 @@ class GameScene: SKScene {
     }
 
     func withinSwitch(touch: CGPoint) -> Bool {
-        let adjustedTouch = CGPoint(x: touch.x - cam.position.x, y: touch.y - cam.position.y)
+        let adjustedTouch = CGPoint(x: touch.x - ball.position.x, y: touch.y - ball.position.y)
         let buttonRect = switchButton?.calculateAccumulatedFrame()
         return (buttonRect?.contains(adjustedTouch))!
     }
@@ -164,6 +196,14 @@ class GameScene: SKScene {
         scene.scaleMode = .aspectFill
 
         skView.presentScene(scene)
+    }
+    
+    func didBegin(_ contact: SKPhysicsContact) {
+        let ballRow = tileMap.tileRowIndex(fromPosition: ball.position)
+        let ballCol = tileMap.tileColumnIndex(fromPosition: ball.position)
+        let ballTileDef = tileMap.tileDefinition(atColumn: ballCol, row: ballRow)
+        ball.terrainEffect(tileNameIn: ballTileDef?.name, ui: &ui)
+        ball.hasHitGround = true
     }
     
 }

@@ -30,25 +30,34 @@ class UI : SKSpriteNode {
         scoreLabel.fontSize = CGFloat(22.0)
         scoreLabel.fontColor = UIColor.black
         scoreLabel.position = CGPoint(x: size.width / 7.0, y: size.height / 16.0)
+        scoreLabel.zPosition = CGFloat(15.0)
+        
         addChild(parLabel)
         parLabel.text = String(handlerIn.course.getHole(holeNum: handlerIn.currentHole)!.par)
         parLabel.fontSize = CGFloat(22.0)
         parLabel.fontColor = UIColor.black
         parLabel.position = CGPoint(x: -size.width / 8.0, y: -size.height / 2.5)
+        parLabel.zPosition = CGFloat(15.0)
+        
         addChild(nameLabel)
         nameLabel.text = handlerIn.players[0].name
         nameLabel.fontSize = CGFloat(22.0)
         nameLabel.fontColor = UIColor.black
         nameLabel.position = CGPoint(x: -1.0 * size.width / 4.0, y: size.height / 16.0)
+        nameLabel.zPosition = CGFloat(15.0)
+        
         addChild(holeLabel)
         holeLabel.text = String(handlerIn.currentHole)
         holeLabel.fontSize = CGFloat(22.0)
         holeLabel.fontColor = UIColor.black
         holeLabel.position = CGPoint(x: -1.0 * size.width / 3.1, y: -size.height / 2.5)
+        holeLabel.zPosition = CGFloat(15.0)
+        
         addChild(lieLabel)
         lieLabel.fontSize = CGFloat(22.0)
         lieLabel.fontColor = UIColor.black
         lieLabel.position = CGPoint(x: 0.0, y: -size.height / 2.5)
+        lieLabel.zPosition = CGFloat(15.0)
     }
     
     func scoreToString(scoreIn: Int) -> String {

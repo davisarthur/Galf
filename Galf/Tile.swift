@@ -74,6 +74,10 @@ class Tile {
         return false
     }
     
+    func equal(tileIn: Tile) -> Bool {
+        return self.x == tileIn.x && self.y == tileIn.y
+    }
+    
     // Is this coordinate in the tile's tile map?
     private func exists(xIn: Int, yIn: Int) -> Bool {
         if (xIn < 0 || xIn >= map.numberOfColumns || yIn < 0 || yIn >= map.numberOfRows) {

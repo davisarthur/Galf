@@ -31,6 +31,7 @@
 		6F76A16A245E8F04009D7962 /* BL2.sks in Resources */ = {isa = PBXBuildFile; fileRef = 6F76A169245E8F04009D7962 /* BL2.sks */; };
 		6F7B6BF22425B4E0003DE123 /* Hole.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F7B6BF12425B4E0003DE123 /* Hole.swift */; };
 		6F8E4DCC24666040008CF601 /* Tile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F8E4DCB24666040008CF601 /* Tile.swift */; };
+		6FA1371A24765C740002D1DF /* BL3.sks in Resources */ = {isa = PBXBuildFile; fileRef = 6FA1371924765C740002D1DF /* BL3.sks */; };
 		6FA1D2BB23BF0ED200D15283 /* Arrow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FA1D2BA23BF0ED200D15283 /* Arrow.swift */; };
 		6FB4BCC723B5CF340043D102 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6FB4BCC623B5CF340043D102 /* Assets.xcassets */; };
 		6FB4BCCD23B5D88F0043D102 /* Terrain.sks in Resources */ = {isa = PBXBuildFile; fileRef = 6FB4BCCC23B5D88F0043D102 /* Terrain.sks */; };
@@ -83,6 +84,7 @@
 		6F76A169245E8F04009D7962 /* BL2.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = BL2.sks; sourceTree = "<group>"; };
 		6F7B6BF12425B4E0003DE123 /* Hole.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Hole.swift; sourceTree = "<group>"; };
 		6F8E4DCB24666040008CF601 /* Tile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tile.swift; sourceTree = "<group>"; };
+		6FA1371924765C740002D1DF /* BL3.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = BL3.sks; sourceTree = "<group>"; };
 		6FA1D2BA23BF0ED200D15283 /* Arrow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Arrow.swift; sourceTree = "<group>"; };
 		6FB4BCC623B5CF340043D102 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		6FB4BCCC23B5D88F0043D102 /* Terrain.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Terrain.sks; sourceTree = "<group>"; };
@@ -238,6 +240,7 @@
 				6F76A165245E85E5009D7962 /* BallardLinks.swift */,
 				6F76A161245E25CF009D7962 /* BL1.sks */,
 				6F76A169245E8F04009D7962 /* BL2.sks */,
+				6FA1371924765C740002D1DF /* BL3.sks */,
 			);
 			name = BallardLinks;
 			sourceTree = "<group>";
@@ -355,6 +358,7 @@
 				6F76A162245E25CF009D7962 /* BL1.sks in Resources */,
 				6FB4BCCD23B5D88F0043D102 /* Terrain.sks in Resources */,
 				6F6B4E6523AAA2B000417678 /* Main.storyboard in Resources */,
+				6FA1371A24765C740002D1DF /* BL3.sks in Resources */,
 				6FEDD7F9246D222100D6DB3C /* SelectScreen.sks in Resources */,
 				6F76A16A245E8F04009D7962 /* BL2.sks in Resources */,
 				6F6B4E5C23AAA2B000417678 /* GameScene.sks in Resources */,

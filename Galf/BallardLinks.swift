@@ -12,6 +12,6 @@ import GameplayKit
 
 struct BallardLinks {
     
-    let course = Course(scenes: [SKScene(fileNamed: "BL1")!, SKScene(fileNamed: "BL2")!])
+    let course = Course(scenes: [SKScene(fileNamed: "BL1")!, SKScene(fileNamed: "BL2")!, SKScene(fileNamed: "BL3")!])
     
 }
