@@ -26,9 +26,9 @@ class Arrow: SKSpriteNode {
         set = true
     }
     
-    func changeDirection() {
+    func changeDirection(isPutting: Bool) {
         aimRight = aimRight ? false : true
-        orient()
+        orient(isPutting: isPutting)
         updateMinMax()
     }
     
@@ -43,11 +43,19 @@ class Arrow: SKSpriteNode {
         }
     }
     
-    func orient() {
+    func orient(isPutting: Bool) {
         if aimRight {
+            if isPutting {
+                zRotation = CGFloat(Double.pi / 180.0)
+                return
+            }
             zRotation = CGFloat(Double.pi / 4.0)
         }
         else {
+            if isPutting {
+                zRotation = CGFloat(179.0 * Double.pi / 180.0)
+                return
+            }
             zRotation = CGFloat(3.0 * Double.pi / 4.0)
         }
     }
@@ -56,11 +64,15 @@ class Arrow: SKSpriteNode {
         isHidden = true
     }
     
-    func reset() {
+    func reset(isPutting: Bool) {
         isHidden = false
         zRotation = CGFloat(Double.pi / 4.0)
         aimRight = true
         set = false
+        if isPutting {
+            zRotation = CGFloat(Double.pi / 180.0)
+            set = true
+        }
         min = CGFloat(0.0)
         max = CGFloat(Double.pi / 2.0)
     }

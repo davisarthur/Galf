@@ -16,6 +16,7 @@ class Ball: SKSpriteNode {
     var hasHitGround = false
     var prevPos: CGPoint? = nil
     var penalty = false
+    var putting = false
     
     required init?(coder aDecoder: NSCoder) {
        super.init(coder: aDecoder)
@@ -59,14 +60,25 @@ class Ball: SKSpriteNode {
         }
         if (tileNameIn?.contains("R"))! {
             roughPhysics()
+            putting = false
             return
         }
         if (tileNameIn?.contains("B"))! {
             bunkerPhysics()
+            putting = false
+            return
+        }
+        if (tileNameIn?.contains("F"))! {
+            putting = false
+            return
+        }
+        if (tileNameIn?.contains("G"))! {
+            putting = true
             return
         }
         if (tileNameIn?.contains("W"))! {
             penalty = true
+            putting = false
             return
         }
     }
@@ -97,14 +109,18 @@ class Ball: SKSpriteNode {
     
     private func roughPhysics() {
         self.physicsBody?.restitution = 0.2
-        self.physicsBody?.linearDamping = 5.0
         self.physicsBody?.angularDamping = 7.0
     }
     
     private func bunkerPhysics() {
         self.physicsBody?.restitution = 0.0
-        self.physicsBody?.linearDamping = 5.0
         self.physicsBody?.angularDamping = 50.0
+    }
+    
+    func outOfBounds(mapIn: SKTileMapNode) {
+        if !(mapIn.contains(self.position)) {
+            self.penalty = true
+        }
     }
     
 }

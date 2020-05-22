@@ -84,8 +84,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
         else {
             if withinSwitch(touch: pos) {
-                if !(arrow.set) {
-                    arrow.changeDirection()
+                if !(arrow.set) || ball.putting {
+                    arrow.changeDirection(isPutting: ball.putting)
                 }
                 print("Within switch")
             }
@@ -111,6 +111,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         if (hole == nil) {
             return
         }
+        
         // if the ball is in the cup, load the scorecard
         if (hole!.inCup(ballPos: ball.position)) {
             self.handler.players[0].scores.append(Int(ui.lieLabel.text!)!)
@@ -118,6 +119,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             loadScorecard()
             return
         }
+        
+        // Check if the ball is out of bounds
+        ball.outOfBounds(mapIn: tileMap)
         
         // if there was a penalty move the ball to previous position
         if (ball.penalty) {
@@ -135,7 +139,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                     prep()
                 }
             }
-            else if !(arrow.set) {
+            else if !(arrow.set) && !ball.putting {
                 arrow.rotate()
             }
             else if !(pointer.set) {
@@ -161,7 +165,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         switchButton.isHidden = true
         powerMeter.isHidden = true
         let angle = CGFloat(arrow.zRotation)
-        let power = ball.maxPower * powFrac
+        var power = ball.maxPower * powFrac
+        if ball.putting {
+            power /= 10.0
+        }
         ball.physicsBody!.isDynamic = true
         ball.physicsBody!.applyImpulse(CGVector(dx: power * cos(angle), dy: power * sin(angle)))
     }
@@ -171,7 +178,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         ball.zRotation = CGFloat(0.0)
         switchButton.isHidden = false
         powerMeter.isHidden = false
-        arrow.reset()
+        arrow.reset(isPutting: ball.putting)
         pointer.reset()
     }
 
