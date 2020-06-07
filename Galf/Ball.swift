@@ -23,12 +23,21 @@ class Ball: SKSpriteNode {
     }
     
     func moving() -> Bool {
-        if magnitude(vector: self.physicsBody!.velocity) < CGFloat(0.05) {
-            return false
-        }
-        else {
+        var output = false
+        if magnitude(vector: self.physicsBody!.velocity) > CGFloat(0.1) {
             return true
         }
+        let sequence = SKAction.sequence([SKAction.wait(forDuration: 0.5), SKAction.run {
+            if self.magnitude(vector: self.physicsBody!.velocity) < CGFloat(0.1) {
+                output = false
+            }
+            else {
+                output = true
+            }
+            }])
+        self.run(sequence)
+        return output
+        
     }
     
     func magnitude(vector: CGVector) -> CGFloat {

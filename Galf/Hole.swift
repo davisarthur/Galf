@@ -17,13 +17,15 @@ class Hole {
     let pin: SKSpriteNode
     let teePad: SKSpriteNode
     let tileMap: SKTileMapNode
+    let shrubs: SKNode?
     
-    init(parIn: Int, pinIn: SKSpriteNode, teePadIn: SKSpriteNode, tileMapIn: SKTileMapNode) {
+    init(parIn: Int, pinIn: SKSpriteNode, teePadIn: SKSpriteNode, tileMapIn: SKTileMapNode, shrubsIn: SKNode?) {
         par = parIn
         pin = pinIn
         teePad = teePadIn
         length = pow(pow(teePad.position.x - pin.position.x, 2.0) + pow(teePad.position.y - (pin.position.y - pin.size.height / 2.0), 2.0), 0.5)
         tileMap = tileMapIn
+        shrubs = shrubsIn
     }
     
     func inCup(ballPos: CGPoint) -> Bool {

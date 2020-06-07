@@ -31,8 +31,9 @@ class Course {
             let pin = scene.childNode(withName: "pin") as! SKSpriteNode
             let teePad = scene.childNode(withName: "teePad") as! SKSpriteNode
             let parLabel = scene.childNode(withName: "par") as! SKLabelNode
+            let shrubs = scene.childNode(withName: "shrubs")
             let par = Int(parLabel.text!)
-            let newHole = Hole(parIn: par!, pinIn: pin, teePadIn: teePad, tileMapIn: tileMap)
+            let newHole = Hole(parIn: par!, pinIn: pin, teePadIn: teePad, tileMapIn: tileMap, shrubsIn: shrubs)
             holes.append(newHole)
         }
     }

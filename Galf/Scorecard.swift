@@ -16,7 +16,7 @@ class Scorecard: SKScene {
     private var quit: SKLabelNode!
     private var par = SKLabelNode()
     private var player = SKLabelNode()
-    private var score = SKLabelNode()
+    private var score = SKNode()
     private var handler: GameHandler!
     
     override func didMove(to view: SKView) {
@@ -45,35 +45,46 @@ class Scorecard: SKScene {
         for hole in handler.course.holes {
             pars.append(hole.getPar())
         }
-        par.text = String(holesToString(scoresIn: pars))
-        par.fontSize = CGFloat(64.0)
-        par.fontColor = UIColor.black
-        par.position = CGPoint(x: -size.width / 5.0 * 0.8, y: size.height / 40.0 * 0.55)
-        par.zPosition = CGFloat(15.0)
+        let parLabels = holesToLabels(scoresIn: pars, leftX: -240.0, middleY: 10.0)
+        for label in parLabels {
+            par.addChild(label)
+        }
         
         addChild(score)
         var scores = [Int]()
         for s in handler.players[0].scores {
             scores.append(s)
         }
-        score.text = String(holesToString(scoresIn: scores))
-        score.fontSize = CGFloat(64.0)
-        score.fontColor = UIColor.black
-        score.position = CGPoint(x: -size.width / 5.0 * 0.8, y: -size.height / 8.0 * 0.95)
-        score.zPosition = CGFloat(15.0)
+        let scoreLabels = holesToLabels(scoresIn: scores, leftX: -240.0, middleY: -85.0)
+        for label in scoreLabels {
+            score.addChild(label)
+        }
+        
         
         addChild(player)
-        player.text = handler.players[0].name
+        player.text = handler.players[0].playerName
+        player.fontName = "I pixel u"
         player.fontSize = CGFloat(64.0)
         player.fontColor = UIColor.black
-        player.position = CGPoint(x: -size.width / 4.0 * 1.1, y: -size.height / 8.0 * 0.95)
+        player.position = CGPoint(x: -size.width / 4.0 * 1.08, y: -size.height / 8.0 * 0.95)
         player.zPosition = CGFloat(15.0)
     }
     
-    func holesToString(scoresIn: [Int]) -> String {
-        var output = ""
-        for score in scoresIn {
-            output.append(String(score) + "\t")
+    func holesToLabels(scoresIn: [Int], leftX: CGFloat, middleY: CGFloat) -> [SKLabelNode] {
+        var output = [SKLabelNode]()
+        let interval = 61.0
+        if scoresIn.count == 0 {
+            return [SKLabelNode()]
+        }
+        for i in 0...scoresIn.count - 1 {
+            let newLabel = SKLabelNode()
+            newLabel.text = String(scoresIn[i])
+            newLabel.fontName = "I pixel u"
+            newLabel.fontSize = CGFloat(55.0)
+            newLabel.fontColor = UIColor.black
+            newLabel.position = CGPoint(x: leftX + CGFloat(Double(i) * interval) , y: middleY)
+            newLabel.zPosition = CGFloat(15.0)
+            output.append(newLabel)
         }
         return output
     }

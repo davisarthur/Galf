@@ -67,7 +67,7 @@ struct TerrainBuilder {
                     if terrainPoints.count > 1 {
                         islands.append(SKShapeNode(points: &terrainPoints, count: terrainPoints.count))
                         islands.last!.lineWidth = 2.0
-                        islands.last!.strokeColor = SKColor.white
+                        islands.last!.strokeColor = SKColor.clear
                         islands.last!.physicsBody = SKPhysicsBody(edgeChainFrom: islands.last!.path!)
                         islands.last!.physicsBody?.isDynamic = false
                     }

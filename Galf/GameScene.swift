@@ -24,8 +24,29 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     private var ui : UI!
     private var builder: TerrainBuilder!
     private var handler: GameHandler!
+    private var playerSprite: SKSpriteNode!
+    private var puttingAnimation: SKAction!
+    private var swingAnimation: SKAction!
     
     override func didMove(to view: SKView) {
+        
+        // Initialize the putting and swing animations
+        var puttingTextures = [SKTexture]()
+        for i in 0...5 {
+            puttingTextures.append(SKTexture(imageNamed: "putting\(i)"))
+        }
+        puttingAnimation = SKAction.animate(with: puttingTextures, timePerFrame: 0.1)
+        
+        var swingTextures = [SKTexture]()
+        for i in 0...10 {
+            swingTextures.append(SKTexture(imageNamed: "swing\(i)"))
+        }
+        swingTextures.append(SKTexture(imageNamed: "swing10"))
+        swingTextures.append(SKTexture(imageNamed: "swing10"))
+        swingTextures.append(SKTexture(imageNamed: "swing10"))
+        swingTextures.append(SKTexture(imageNamed: "swing10"))
+        swingTextures.append(SKTexture(imageNamed: "swing10"))
+        swingAnimation = SKAction.animate(with: swingTextures, timePerFrame: 0.08)
         
         // Initialize UI and basic features
         self.physicsWorld.contactDelegate = self
@@ -38,6 +59,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     func loadHole(gameHandler: GameHandler) {
         
         self.hole = gameHandler.getNextHole()
+        
+        for shrub in self.hole!.shrubs!.children {
+            shrub.removeFromParent()
+            self.addChild(shrub)
+        }
+        
         self.ui = self.childNode(withName: "cam")?.childNode(withName: "ui") as! UI?
         
         self.handler = gameHandler
@@ -57,6 +84,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         self.ball = self.childNode(withName: "//Ball") as! Ball?
         ball.physicsBody?.categoryBitMask = 1
+        
         self.cam = self.childNode(withName: "cam") as! SKCameraNode?
         self.camera = cam
         self.camera?.constraints = BallCam.genBounds(ballMap: self.tileMap, scene: self, ball: self.ball)
@@ -76,6 +104,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         ball.position.x -= 5.0
         ball.position.y += 20.0
         
+        playerSprite = SKSpriteNode(imageNamed: "putting0")
+        playerSprite.size = CGSize(width: playerSprite.size.width / 8.0, height: playerSprite.size.height / 8.0)
+        playerSprite.isHidden = true
+        addChild(playerSprite)
+        positionPlayer()
+    }
+    
+    private func positionPlayer() {
+        playerSprite.position = ball.position
+        playerSprite.zPosition = -1.0
+        playerSprite.position.x -= 3.0 * playerSprite.size.width / 64.0 * playerSprite.xScale
+        playerSprite.position.y += 12.0 * playerSprite.size.height / 64.0
     }
     
     func touchDown(atPoint pos : CGPoint) {
@@ -86,6 +126,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             if withinSwitch(touch: pos) {
                 if !(arrow.set) || ball.putting {
                     arrow.changeDirection(isPutting: ball.putting)
+                    playerSprite.xScale *= -1.0
                 }
                 print("Within switch")
             }
@@ -131,13 +172,20 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         // If the ball is not moving
         if !(ball.moving()) {
+            playerSprite.isHidden = false
+            if ball.putting {
+                playerSprite.texture = SKTexture(imageNamed: "putting0")
+            }
+            else {
+                playerSprite.texture = SKTexture(imageNamed: "swing0")
+            }
+            
+            positionPlayer()
             ball.hasHitGround = false
             ball.defaultPhysics()
+            
             if ball.physicsBody!.isDynamic {
-                SKAction.wait(forDuration: 1.0)
-                if !(ball.moving()) {
-                    prep()
-                }
+                prep()
             }
             else if !(arrow.set) && !ball.putting {
                 arrow.rotate()
@@ -168,9 +216,22 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         var power = ball.maxPower * powFrac
         if ball.putting {
             power /= 10.0
+            playerSprite.run(puttingAnimation)
+            let sequence = SKAction.sequence([SKAction.wait(forDuration: 0.4), SKAction.run {
+                self.ball.physicsBody!.isDynamic = true
+                self.ball.physicsBody!.applyImpulse(CGVector(dx: power * cos(angle), dy: power * sin(angle)))
+                }])
+            playerSprite.run(sequence)
         }
-        ball.physicsBody!.isDynamic = true
-        ball.physicsBody!.applyImpulse(CGVector(dx: power * cos(angle), dy: power * sin(angle)))
+        else {
+            playerSprite.run(swingAnimation)
+            let sequence = SKAction.sequence([SKAction.wait(forDuration: 0.56), SKAction.run {
+                self.ball.physicsBody!.isDynamic = true
+                self.ball.physicsBody!.applyImpulse(CGVector(dx: power * cos(angle), dy: power * sin(angle)))
+                }])
+            playerSprite.run(sequence)
+        }
+        
     }
     
     func prep() {
@@ -179,6 +240,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         switchButton.isHidden = false
         powerMeter.isHidden = false
         arrow.reset(isPutting: ball.putting)
+        playerSprite.xScale = 1.0
         pointer.reset()
     }
 

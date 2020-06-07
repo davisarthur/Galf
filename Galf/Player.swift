@@ -12,12 +12,12 @@ import GameplayKit
 
 class Player {
     
-    let name: String
+    var playerName: String
     var scores = [Int]()
     var totalScore = 0
     
     init(nameIn: String) {
-        name = nameIn
+        playerName = nameIn
     }
     
 }

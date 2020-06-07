@@ -27,36 +27,62 @@ class UI : SKSpriteNode {
     func setUp(handlerIn: GameHandler) {
         addChild(scoreLabel)
         scoreLabel.text = String(scoreToString(scoreIn: handlerIn.players[0].totalScore))
-        scoreLabel.fontSize = CGFloat(22.0)
+        scoreLabel.fontSize = CGFloat(12.0)
+        scoreLabel.fontName = "I pixel u"
         scoreLabel.fontColor = UIColor.black
-        scoreLabel.position = CGPoint(x: size.width / 7.0, y: size.height / 16.0)
+        scoreLabel.position = CGPoint(x: -size.width / 7.0 * 0.1, y: size.height / 16.0)
         scoreLabel.zPosition = CGFloat(15.0)
         
         addChild(parLabel)
+        let parTitle = SKLabelNode(text: "Par")
+        parTitle.fontName = "I pixel u"
+        parTitle.fontSize = CGFloat(12.0)
+        parTitle.fontColor = UIColor.black
+        parTitle.position = CGPoint(x: 0.25 * size.width / 4.0, y: -size.height / 3.5)
+        parTitle.zPosition = CGFloat(15.0)
+        addChild(parTitle)
         parLabel.text = String(handlerIn.course.getHole(holeNum: handlerIn.currentHole)!.par)
-        parLabel.fontSize = CGFloat(22.0)
+        parLabel.fontSize = CGFloat(12.0)
+        parLabel.fontName = "I pixel u"
         parLabel.fontColor = UIColor.black
-        parLabel.position = CGPoint(x: -size.width / 8.0, y: -size.height / 2.5)
+        parLabel.position = CGPoint(x: 0.75 * size.width / 4.0, y: -size.height / 3.5)
         parLabel.zPosition = CGFloat(15.0)
         
         addChild(nameLabel)
-        nameLabel.text = handlerIn.players[0].name
-        nameLabel.fontSize = CGFloat(22.0)
+        nameLabel.text = handlerIn.players[0].playerName
+        nameLabel.fontSize = CGFloat(12.0)
+        nameLabel.fontName = "I pixel u"
         nameLabel.fontColor = UIColor.black
-        nameLabel.position = CGPoint(x: -1.0 * size.width / 4.0, y: size.height / 16.0)
+        nameLabel.position = CGPoint(x: -0.8 * size.width / 4.0, y: size.height / 16.0)
         nameLabel.zPosition = CGFloat(15.0)
         
         addChild(holeLabel)
+        let holeTitle = SKLabelNode(text: "Hole")
+        holeTitle.fontName = "I pixel u"
+        holeTitle.fontSize = CGFloat(12.0)
+        holeTitle.fontColor = UIColor.black
+        holeTitle.position = CGPoint(x: -0.7 * size.width / 3.0, y: -size.height / 3.5)
+        holeTitle.zPosition = CGFloat(15.0)
+        addChild(holeTitle)
         holeLabel.text = String(handlerIn.currentHole)
-        holeLabel.fontSize = CGFloat(22.0)
+        holeLabel.fontSize = CGFloat(12.0)
+        holeLabel.fontName = "I pixel u"
         holeLabel.fontColor = UIColor.black
-        holeLabel.position = CGPoint(x: -1.0 * size.width / 3.1, y: -size.height / 2.5)
+        holeLabel.position = CGPoint(x: -0.25 * size.width / 3.0, y: -size.height / 3.5)
         holeLabel.zPosition = CGFloat(15.0)
         
         addChild(lieLabel)
-        lieLabel.fontSize = CGFloat(22.0)
+        let lieTitle = SKLabelNode(text: "Lie")
+        lieTitle.fontName = "I pixel u"
+        lieTitle.fontSize = CGFloat(13.0)
+        lieTitle.fontColor = UIColor.black
+        lieTitle.position = CGPoint(x: 0.45 * size.width / 3.0, y: size.height / 16.0)
+        lieTitle.zPosition = CGFloat(15.0)
+        addChild(lieTitle)
+        lieLabel.fontSize = CGFloat(13.0)
+        lieLabel.fontName = "I pixel u"
         lieLabel.fontColor = UIColor.black
-        lieLabel.position = CGPoint(x: 0.0, y: -size.height / 2.5)
+        lieLabel.position = CGPoint(x: 0.85 * size.width / 3.0, y: size.height / 16.0)
         lieLabel.zPosition = CGFloat(15.0)
     }
     
