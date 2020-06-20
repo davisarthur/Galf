@@ -27,6 +27,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     private var playerSprite: SKSpriteNode!
     private var puttingAnimation: SKAction!
     private var swingAnimation: SKAction!
+    private var cloudCount = 4
+    private var cloudSpeed = CGFloat(0.5)
+    private var clouds = [Cloud]()
     
     override func didMove(to view: SKView) {
         
@@ -48,12 +51,21 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         swingTextures.append(SKTexture(imageNamed: "swing10"))
         swingAnimation = SKAction.animate(with: swingTextures, timePerFrame: 0.08)
         
+        // Initialize clouds
+        while clouds.count < cloudCount {
+            genCloud()
+        }
+        
         // Initialize UI and basic features
         self.physicsWorld.contactDelegate = self
         self.pointer = self.childNode(withName: "//pointer") as! Pointer?
         self.powerMeter = self.childNode(withName: "//powerMeter") as! SKSpriteNode?
         self.arrow = self.childNode(withName: "//arrow") as! Arrow?
         self.switchButton = self.childNode(withName: "//SwitchButton") as! SKSpriteNode?
+    }
+    
+    private func genCloud() {
+        clouds.append(Cloud(velocityIn: cloudSpeed, cloudsIn: clouds, tileMapIn: tileMap))
     }
     
     func loadHole(gameHandler: GameHandler) {
@@ -148,6 +160,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     
     override func update(_ currentTime: TimeInterval) {
+        for i in 0...clouds.count - 1 {
+            clouds[i].move()
+        }
+        
         // hole has not been set up, do nothing
         if (hole == nil) {
             return

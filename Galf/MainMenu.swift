@@ -13,43 +13,28 @@ import GameplayKit
 class MainMenu: SKScene {
     
     private var start : SKLabelNode!
-    private var cloudCount = 2
-    private var cloudSpeed = CGFloat(1.0)
-    private var clouds: [SKSpriteNode]!
-    private var screenRect: CGRect!
+    private var cloudCount = 3
+    private var cloudSpeed = CGFloat(0.7)
+    private var clouds: [Cloud]!
+    private var tileMap: SKTileMapNode!
     
     override func didMove(to view: SKView) {
         self.start = self.childNode(withName: "Start") as! SKLabelNode?
-        self.screenRect = UIScreen.main.bounds
-        self.clouds = [SKSpriteNode]()
-        for i in 0...cloudCount - 1 {
-            clouds.append(genCloud(index: i))
-        }
-        for cloud in clouds {
-            addChild(cloud)
-            print("Cloud Position: \(cloud.position)")
+        self.tileMap = self.childNode(withName: "tileMap") as! SKTileMapNode?
+        self.clouds = [Cloud]()
+        while clouds.count < cloudCount {
+            genCloud()
         }
     }
     
     override func update(_ currentTime: TimeInterval) {
         for i in 0...clouds.count - 1 {
-            clouds[i].position.x += cloudSpeed
-            if clouds[i].position.x - clouds[i].size.width / 2.0 > screenRect.width / 2.0 {
-                clouds[i].position.x = -screenRect.width / 2.0 - clouds[i].size.width / 2.0
-            }
+            clouds[i].move()
         }
     }
     
-    private func genCloud(index: Int) -> SKSpriteNode {
-        let cloud = SKSpriteNode(imageNamed: "cloud\(Int.random(in: 0...1))")
-        cloud.scale(to: CGSize(width: cloud.size.width / 5.0, height: cloud.size.height / 5.0))
-        let xpos = CGFloat.random(in: -screenRect.width / 2.0...screenRect.width / 2.0)
-        let lowerY = -screenRect.height / 2.0 + cloud.size.height / 2.0
-        let upperY = screenRect.height / 2.0 - cloud.size.height / 2.0
-        let ypos = CGFloat.random(in: lowerY + (upperY - lowerY) / CGFloat(cloudCount) * CGFloat(index)...lowerY + (upperY - lowerY) / CGFloat(cloudCount) * CGFloat(index + 1))
-        cloud.position = CGPoint(x: xpos, y: ypos)
-        cloud.zPosition = -50.0
-        return cloud
+    private func genCloud() {
+        clouds.append(Cloud(velocityIn: cloudSpeed, cloudsIn: clouds, tileMapIn: tileMap))
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
