@@ -17,7 +17,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     private var powerMeter : SKSpriteNode!
     private var pointer : Pointer!
     private var arrow : Arrow!
-    private var cam : SKCameraNode!
+    private var ballCam : SKCameraNode!
     private var pin: SKSpriteNode!
     private var teePad: SKSpriteNode!
     private var hole : Hole?
@@ -30,6 +30,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     private var cloudCount = 4
     private var cloudSpeed = CGFloat(0.5)
     private var clouds = [Cloud]()
+    private var camControl: CameraController!
     
     override func didMove(to view: SKView) {
         
@@ -97,13 +98,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.ball = self.childNode(withName: "//Ball") as! Ball?
         ball.physicsBody?.categoryBitMask = 1
         
-        self.cam = self.childNode(withName: "cam") as! SKCameraNode?
-        self.camera = cam
+        // initize ball camera and secondary camera
+        self.ballCam = self.childNode(withName: "cam") as! SKCameraNode?
+        self.camera = ballCam
         self.camera?.constraints = BallCam.genBounds(ballMap: self.tileMap, scene: self, ball: self.ball)
-            
+        self.camControl = CameraController(controlsIn: ballCam.childNode(withName: "controls")!, ballCamIn: ballCam, sceneIn: self, tileMapIn: tileMap)
+        camControl.prepControlCam()
+        
+        // build terrain
         builder = TerrainBuilder(mapIn: tileMap, pinIn: pin, sceneIn: self)
         builder.build()
         
+        // collision configuration
         for child in self.children {
             if (child.name == nil) {
                 child.physicsBody?.contactTestBitMask = ball.physicsBody?.contactTestBitMask as! UInt32
@@ -112,10 +118,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             }
         }
         
+        // Move ball to tee pad
         ball.position = teePad.position
         ball.position.x -= 5.0
         ball.position.y += 20.0
         
+        // add player to the scene
         playerSprite = SKSpriteNode(imageNamed: "putting0")
         playerSprite.size = CGSize(width: playerSprite.size.width / 8.0, height: playerSprite.size.height / 8.0)
         playerSprite.isHidden = true
@@ -131,10 +139,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func touchDown(atPoint pos : CGPoint) {
-        if ((ball?.physicsBody!.isDynamic)!) {
-            
-        }
-        else {
+        // if the ball is not dynamic...
+        if (!(ball?.physicsBody!.isDynamic)!) {
             if withinSwitch(touch: pos) {
                 if !(arrow.set) || ball.putting {
                     arrow.changeDirection(isPutting: ball.putting)
@@ -144,7 +150,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             }
             else {
                 if !(arrow.set) {
-                    arrow.setAngle()
+                    // if a control is touched...
+                    if (camControl.controlTouched(p: pos, sceneIn: self)) {
+                        return
+                    }
+                    else {
+                        camControl.hideControls()
+                        camControl.restoreBallCam(sceneIn: self)
+                        arrow.setAngle()
+                    }
                 }
                 else if !(pointer.set) {
                     let fraction = pointer.setPower()
@@ -158,8 +172,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         for t in touches { self.touchDown(atPoint: t.location(in: self)) }
     }
     
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        for _ in touches {
+            camControl.controlling = false
+        }
+    }
     
     override func update(_ currentTime: TimeInterval) {
+        // move clouds
         for i in 0...clouds.count - 1 {
             clouds[i].move()
         }
@@ -175,6 +195,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             handler.updateTotalScore()
             loadScorecard()
             return
+        }
+        
+        if camControl.controlling {
+            camControl.moveControlCam()
         }
         
         // Check if the ball is out of bounds
@@ -251,6 +275,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func prep() {
+        camControl.restoreBallCam(sceneIn: self)
+        camControl.prepControlCam()
+        camControl.returnButton.isHidden = true
+        camControl.toggleButton.isHidden = false
+        camControl.unhideControls()
         ball.physicsBody!.isDynamic = false
         ball.zRotation = CGFloat(0.0)
         switchButton.isHidden = false

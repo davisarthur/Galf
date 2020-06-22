@@ -25,7 +25,6 @@
 		6F6B4E7523AAA2B300417678 /* GalfTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F6B4E7423AAA2B300417678 /* GalfTests.swift */; };
 		6F6C4EEA246090CD00E0B4BD /* UI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F6C4EE9246090CD00E0B4BD /* UI.swift */; };
 		6F76A15A245D3881009D7962 /* MainMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F76A159245D3881009D7962 /* MainMenu.swift */; };
-		6F76A160245D4254009D7962 /* SNButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F76A15F245D4254009D7962 /* SNButton.swift */; };
 		6F76A162245E25CF009D7962 /* BL1.sks in Resources */ = {isa = PBXBuildFile; fileRef = 6F76A161245E25CF009D7962 /* BL1.sks */; };
 		6F76A164245E78F8009D7962 /* Course.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F76A163245E78F8009D7962 /* Course.swift */; };
 		6F76A166245E85E5009D7962 /* BallardLinks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F76A165245E85E5009D7962 /* BallardLinks.swift */; };
@@ -34,6 +33,7 @@
 		6F8E4DCC24666040008CF601 /* Tile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F8E4DCB24666040008CF601 /* Tile.swift */; };
 		6FA1371A24765C740002D1DF /* BL3.sks in Resources */ = {isa = PBXBuildFile; fileRef = 6FA1371924765C740002D1DF /* BL3.sks */; };
 		6FA1D2BB23BF0ED200D15283 /* Arrow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FA1D2BA23BF0ED200D15283 /* Arrow.swift */; };
+		6FA5B399249EFFC800F82D46 /* CameraController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FA5B398249EFFC800F82D46 /* CameraController.swift */; };
 		6FA8D119247CD7DA00D7039A /* BL5.sks in Resources */ = {isa = PBXBuildFile; fileRef = 6FA8D118247CD7DA00D7039A /* BL5.sks */; };
 		6FA8D11B247E1E9600D7039A /* BL6.sks in Resources */ = {isa = PBXBuildFile; fileRef = 6FA8D11A247E1E9600D7039A /* BL6.sks */; };
 		6FB4BCCD23B5D88F0043D102 /* Terrain.sks in Resources */ = {isa = PBXBuildFile; fileRef = 6FB4BCCC23B5D88F0043D102 /* Terrain.sks */; };
@@ -83,7 +83,6 @@
 		6F6B4E7623AAA2B300417678 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6F6C4EE9246090CD00E0B4BD /* UI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UI.swift; sourceTree = "<group>"; };
 		6F76A159245D3881009D7962 /* MainMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenu.swift; sourceTree = "<group>"; };
-		6F76A15F245D4254009D7962 /* SNButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SNButton.swift; sourceTree = "<group>"; };
 		6F76A161245E25CF009D7962 /* BL1.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = BL1.sks; sourceTree = "<group>"; };
 		6F76A163245E78F8009D7962 /* Course.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Course.swift; sourceTree = "<group>"; };
 		6F76A165245E85E5009D7962 /* BallardLinks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BallardLinks.swift; sourceTree = "<group>"; };
@@ -92,6 +91,7 @@
 		6F8E4DCB24666040008CF601 /* Tile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tile.swift; sourceTree = "<group>"; };
 		6FA1371924765C740002D1DF /* BL3.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = BL3.sks; sourceTree = "<group>"; };
 		6FA1D2BA23BF0ED200D15283 /* Arrow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Arrow.swift; sourceTree = "<group>"; };
+		6FA5B398249EFFC800F82D46 /* CameraController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraController.swift; sourceTree = "<group>"; };
 		6FA8D118247CD7DA00D7039A /* BL5.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = BL5.sks; sourceTree = "<group>"; };
 		6FA8D11A247E1E9600D7039A /* BL6.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = BL6.sks; sourceTree = "<group>"; };
 		6FB4BCCC23B5D88F0043D102 /* Terrain.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Terrain.sks; sourceTree = "<group>"; };
@@ -150,10 +150,7 @@
 				6FDED9DC247A49BC008793FA /* Assets.xcassets */,
 				6FDED9D5247A23E0008793FA /* fonts */,
 				6F6B4E6123AAA2B000417678 /* GameViewController.swift */,
-				6F76A15F245D4254009D7962 /* SNButton.swift */,
 				6FEDD7F3246D1D1C00D6DB3C /* GameHandler.swift */,
-				6FEDD7F6246D1DDD00D6DB3C /* Player.swift */,
-				6F04C3102499B4560019EAB6 /* Cloud.swift */,
 				6F76A167245E8776009D7962 /* Courses */,
 				6FEDD7F5246D1D3100D6DB3C /* Scenes */,
 				6F76A157245D3057009D7962 /* Ball */,
@@ -210,6 +207,9 @@
 		6F76A15B245D389E009D7962 /* GameScene */ = {
 			isa = PBXGroup;
 			children = (
+				6F04C3102499B4560019EAB6 /* Cloud.swift */,
+				6FEDD7F6246D1DDD00D6DB3C /* Player.swift */,
+				6FA5B398249EFFC800F82D46 /* CameraController.swift */,
 				6F6C4EE9246090CD00E0B4BD /* UI.swift */,
 				6F6B4E5B23AAA2B000417678 /* GameScene.sks */,
 				6F6B4E5F23AAA2B000417678 /* GameScene.swift */,
@@ -417,6 +417,7 @@
 				6F0C1A3923C19C55008C5FAB /* Ball.swift in Sources */,
 				6F0C1A3723C18FC2008C5FAB /* Pointer.swift in Sources */,
 				6FEF6E1E23C2A89C00BF81CF /* TerrainBuilder.swift in Sources */,
+				6FA5B399249EFFC800F82D46 /* CameraController.swift in Sources */,
 				6FEDD7FB246D9DD300D6DB3C /* SelectScreen.swift in Sources */,
 				6F52F9EA23C99F9F002D6099 /* Bunker.swift in Sources */,
 				6F7B6BF22425B4E0003DE123 /* Hole.swift in Sources */,
@@ -427,7 +428,6 @@
 				6F04C3112499B4560019EAB6 /* Cloud.swift in Sources */,
 				6F76A166245E85E5009D7962 /* BallardLinks.swift in Sources */,
 				6F6C4EEA246090CD00E0B4BD /* UI.swift in Sources */,
-				6F76A160245D4254009D7962 /* SNButton.swift in Sources */,
 				6FA1D2BB23BF0ED200D15283 /* Arrow.swift in Sources */,
 				6F76A15A245D3881009D7962 /* MainMenu.swift in Sources */,
 				6FEDD7F2246CE5A900D6DB3C /* Scorecard.swift in Sources */,
